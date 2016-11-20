@@ -6,6 +6,11 @@
     text-align: center;
 }
 
+.navbar-default .navbar-brand .green
+{
+    color: #2e944b;
+}
+
 main .form-control
 {
     /* center form controls */
