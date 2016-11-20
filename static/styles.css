@@ -6,24 +6,6 @@
     text-align: center;
 }
 
-/* colors for navbar */
-.navbar-default .navbar-brand .blue
-{
-    color: #537fbe;
-}
-.navbar-default .navbar-brand .red
-{
-    color: #ea433b;
-}
-.navbar-default .navbar-brand .yellow
-{
-    color: #f5b82e;
-}
-.navbar-default .navbar-brand .green
-{
-    color: #2e944b;
-}
-
 main .form-control
 {
     /* center form controls */
