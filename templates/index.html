@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Name</th>
+                <th>Shares</th>
+                <th>Price</th>
+                <th>TOTAL</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <td colspan="4"></td>
+                <td>{{ total }}</td>
+            </tr>
+        </tfoot>
+        <tbody>
+                {% for t in transactions %}
+                <tr>
+                    <td>{{ t.symbol }}</td>
+                    <td>{{ t.name }}</td>
+                    <td>{{ t["SUM(shares)"] }}</td>
+                    <td>{{ t.price }}</td>
+                    <td>{{ t.total }}</td>
+                </tr>
+                {% endfor %}
+            
+            <tr>
+                <td colspan="4">CASH</td>
+                <td>{{ cash }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
