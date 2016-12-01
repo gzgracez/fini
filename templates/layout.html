@@ -7,8 +7,6 @@
     <!-- documentation at http://getbootstrap.com/, alternative themes at https://www.bootstrapcdn.com/bootswatch/ -->
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet"/>
 
-    <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
-
     <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet"/>
 
     <meta charset="utf-8"/>
@@ -32,7 +30,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="{{ url_for('index') }}"><img src="http://vignette2.wikia.nocookie.net/pokemon/images/b/b1/025Pikachu_XY_anime_3.png/revision/latest?cb=20140902050035" style="width:50px;height:40px;"></a>
+                    <a class="navbar-brand" href="{{ url_for('index') }}"><img src="https://photos-1.dropbox.com/t/2/AABunrwTLXpVeHunAXEthYJa1eWbHzCLX0lnmADV_JTKkw/12/9823147/png/32x32/3/1480644000/0/2/fini_black.png/EKe7qQcY3IwEIAIoAg/CaWHuERfnJBoNa3wCDiRbZF0eJsN81qcAcIwhW9tV1E?size_mode=3&dl=0&size=2048x1536" style="width:40px;height:40px;"></a>
                 </div>
                 <div class="collapse navbar-collapse" id="navbar">
                     {% if session.user_id %}
