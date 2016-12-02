@@ -336,6 +336,53 @@ def search():
     else:
         return render_template("search.html")
 
+
+@app.route("/account", methods=["GET", "POST"])
+@login_required
+def account():
+    """Change account settings"""
+    
+    # if user reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        if request.form.get("btn") == "username":
+
+            # ensure all fields were filled
+            if not request.form.get("username"):
+                return apology("Grazzzzze required")
+            
+            # update username
+            db.execute("UPDATE users SET username = :username WHERE id = :id", username = request.form.get("username"), id = session["user_id"])
+
+        if request.form.get("btn") == "password":
+
+            # ensure all fields were filled
+            if not request.form.get("old") or not request.form.get("new") or not request.form.get("newr"):
+                return apology("all fields required")
+                
+            old = request.form.get("old")
+            new = request.form.get("new")
+            newr = request.form.get("newr")
+                
+            # check old password
+            if not pwd_context.verify(request.form.get("old"), db.execute("SELECT hash FROM users WHERE id = :id",
+                id = session["user_id"])[0]["hash"]):
+                    return apology("incorrect old password")
+                
+            # check that new passwords match
+            elif new != newr:
+                return apology("new passwords do not match")
+            
+            # update password
+            db.execute("UPDATE users SET hash = :hash WHERE id = :id", hash = pwd_context.encrypt(new), id = session["user_id"])
+            
+        # return to password window
+        return render_template("account.html")
+    
+    # else if user reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("account.html")
+
 @app.route("/articles")
 def articles():
     """Look up articles for geo."""
