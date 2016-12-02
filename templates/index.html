@@ -7,6 +7,7 @@
 {% block main %}
     <img src="static/fini_black.png" style="width:150px;height:150px;">
     <h4>News</h4>
+
     <table class="table table-striped">
         <tbody>
             <!-- <tr>
@@ -28,7 +29,7 @@
             <tr>
                 <td>[img]</td>
                 <td><a href="{{ n.link }}"><b>{{ n.title }}</b></a><br>
-                [Intro]</td>
+                {{ n.details }}</td>
             </tr>
         {% endfor %}
         </tbody>

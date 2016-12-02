@@ -6,6 +6,7 @@ import json
 
 from flask import redirect, render_template, request, session, url_for
 from functools import wraps
+from bs4 import BeautifulSoup
 
 def apology(top="", bottom=""):
     """Renders message as an apology to user."""
@@ -96,10 +97,33 @@ def lookupArticles(geo):
     # if no items in feed, get feed from Onion
     if not feed["items"]:
         feed = feedparser.parse("http://www.theonion.com/feeds/rss")
-    print(json.dumps(feed["items"][0], indent=4))
-    # # cache results
-    # lookup.cache[geo] = [{"link": item["link"], "title": item["title"]} for item in feed["items"]]
-    return [{"link": item["link"], "title": item["title"]} for item in feed["items"]]
+
+
+    news = []
+    for i in feed["items"]:
+        temp = {}
+        # print(json.dumps(i, indent=4))
+        temp["title"] = i.title
+        temp["link"] = i.link
+        # print(soup.prettify())
+        try:
+            value = i.summary_detail.value
+            soup = BeautifulSoup(value, 'html.parser')
+            b = soup.findAll("font", size="-1")
+            temp["details"] = b[1].text
+            print(b[1])
+        except Exception as e:
+            print(e)
+            # return "Could not find food data."
+        # return body
+        news.append(temp)
+    print(json.dumps(news, indent=4))
+    return news
+    # return [{"link": item["link"], "title": item["title"]} for item in feed["items"]]
+    # return [{"link": item["link"], "title": item["title"]} for item in feed["items"]]
+
+
+
 
     # # return results
     # return lookup.cache[geo]
