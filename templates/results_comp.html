@@ -70,6 +70,13 @@
                 <td><a href="#"><b>[Title]</b></a><br>
                 [Intro]</td>
             </tr>
+            {% for n in news %}
+                <tr>
+                    <td><img src="http:{{ n.imgurl }}" style="min-width:40px;min-height:40px"></td>
+                    <td><a href="{{ n.link }}" target=_"new"><b>{{ n.title }}</b></a><br>
+                    {{ n.details }}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 {% endblock %}
