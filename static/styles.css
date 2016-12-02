@@ -1,6 +1,6 @@
-.centered
+body
 {
-    align-items: center;
+    margin-bottom: 150px;
 }
 
 .container
