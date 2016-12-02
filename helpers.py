@@ -98,7 +98,6 @@ def lookupArticles(geo):
     if not feed["items"]:
         feed = feedparser.parse("http://www.theonion.com/feeds/rss")
 
-
     news = []
     for i in feed["items"]:
         temp = {}
@@ -115,15 +114,9 @@ def lookupArticles(geo):
         except Exception as e:
             print(e)
             # return "Could not find food data."
-        # return body
         news.append(temp)
     print(json.dumps(news, indent=4))
     return news
-    # return [{"link": item["link"], "title": item["title"]} for item in feed["items"]]
-    # return [{"link": item["link"], "title": item["title"]} for item in feed["items"]]
-
-
-
 
     # # return results
     # return lookup.cache[geo]
