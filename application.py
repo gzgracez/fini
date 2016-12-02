@@ -172,7 +172,7 @@ def search():
             
             stock["price"] = usd(stock["price"])
             
-            return render_template("results_comp.html", stock = stock)
+            return render_template("results_comp.html", stock = stock, news = lookupArticles(q=request.form.get("prompt"))[:5])
 
         if request.form.get("button") == "industry":
             return render_template("results.html", title="Industry", news = lookupArticles(q=request.form.get("prompt")))
