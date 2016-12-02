@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-    <h4>Apple Inc.</h4>
+    <h4>{{ stock["name"] }}, {{ stock["symbol"] }}</h4>
     <br>
     <div class="container-fluid">
         <div class="col-lg-6">
@@ -20,32 +20,28 @@
                 <table class="table table-striped">
                     <tbody>
                         <tr>
-                            <td><b>Last trade</b></td>
-                            <td>$ 123.01</td>
+                            <td><b>Price</b></td>
+                            <td>{{ stock["price"] }}</td>
                         </tr>
                         <tr>
                             <td><b>Day's Range</b></td>
-                            <td>$ 1,00 - 2,93</td>
+                            <td>{{ stock["range"] }}</td>
                         </tr>
                         <tr>
                             <td><b>Volume</b></td>
-                            <td>500,000</td>
+                            <td>{{ stock["volume"] }}</td>
                         </tr>
                         <tr>
                             <td><b>Market Cap</b></td>
-                            <td>$ 53,000,000,000</td>
-                        </tr>
-                        <tr>
-                            <td><b>Beta</b></td>
-                            <td>1.49</td>
+                            <td>{{ stock["mcap"] }}</td>
                         </tr>
                         <tr>
                             <td><b>PE Ratio</b></td>
-                            <td>13.18</td>
+                            <td>{{ stock["peratio"] }}</td>
                         </tr>
                         <tr>
-                            <td><b>EPS</b></td>
-                            <td>8.31</td>
+                            <td><b>EPS Estimate Current Year</b></td>
+                            <td>{{ stock["eps"] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -70,13 +66,13 @@
                 <td><a href="#"><b>[Title]</b></a><br>
                 [Intro]</td>
             </tr>
-            {% for n in news %}
+<!--             {% for n in news %}
                 <tr>
                     <td><img src="http:{{ n.imgurl }}" style="min-width:40px;min-height:40px"></td>
                     <td><a href="{{ n.link }}" target=_"new"><b>{{ n.title }}</b></a><br>
                     {{ n.details }}</td>
                 </tr>
-            {% endfor %}
+            {% endfor %} -->
         </tbody>
     </table>
 {% endblock %}

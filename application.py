@@ -164,7 +164,16 @@ def search():
 
         # redirect based on button
         if request.form.get("button") == "company":
-            return apology("You pressed", "company")
+            
+            stock = lookup(request.form.get("prompt"))
+            
+            if stock == None:
+                return apology("symbol not found")
+            
+            stock["price"] = usd(stock["price"])
+            
+            return render_template("results_comp.html", stock = stock)
+
         if request.form.get("button") == "industry":
             return render_template("results.html", title="Industry", news = lookupArticles(geo="02138", q=request.form.get("prompt")))
         if request.form.get("button") == "geography":
