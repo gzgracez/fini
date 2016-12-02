@@ -328,10 +328,10 @@ def search():
         if request.form.get("button") == "company":
             return apology("You pressed", "company")
         if request.form.get("button") == "industry":
-            return apology("You pressed", "industry")
+            return render_template("results.html", news = lookupArticles(geo="02138", q=request.form.get("prompt")))
         if request.form.get("button") == "geography":
-            return apology("You pressed", "geography")
-    
+            return render_template("results.html", news = lookupArticles(geo=request.form.get("prompt"), q=""))
+
     # else if user reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("search.html")
