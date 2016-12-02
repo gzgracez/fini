@@ -1,40 +1,28 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Log In
+    Index
 {% endblock %}
 
 {% block main %}
+    <img src="https://photos-1.dropbox.com/t/2/AABunrwTLXpVeHunAXEthYJa1eWbHzCLX0lnmADV_JTKkw/12/9823147/png/32x32/3/1480644000/0/2/fini_black.png/EKe7qQcY3IwEIAIoAg/CaWHuERfnJBoNa3wCDiRbZF0eJsN81qcAcIwhW9tV1E?size_mode=3&dl=0&size=2048x1536" style="width:150px;height:150px;">
+    <h4>News</h4>
     <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Symbol</th>
-                <th>Name</th>
-                <th>Shares</th>
-                <th>Price</th>
-                <th>TOTAL</th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <td colspan="4"></td>
-                <td>{{ total }}</td>
-            </tr>
-        </tfoot>
         <tbody>
-                {% for t in transactions %}
-                <tr>
-                    <td>{{ t.symbol }}</td>
-                    <td>{{ t.name }}</td>
-                    <td>{{ t["SUM(shares)"] }}</td>
-                    <td>{{ t.price }}</td>
-                    <td>{{ t.total }}</td>
-                </tr>
-                {% endfor %}
-            
             <tr>
-                <td colspan="4">CASH</td>
-                <td>{{ cash }}</td>
+                <td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/http%3A%2F%2Fcom.ft.imagepublish.prod-us.s3.amazonaws.com%2Fdf2da30e-b7d8-11e6-961e-a1acd97f622d?source=next&fit=scale-down&width=700" style="width:40px;height:40px;"></td>
+                <td><a href="https://www.ft.com/content/74a8fd76-b58a-11e6-961e-a1acd97f622d" target=_"new"><b>Angela Merkel: ‘Her life’s work is in danger’</b></a><br>
+                Can the chancellor’s re-election campaign counter the anger over immigration?</td>
+            </tr>
+            <tr>
+                <td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/http%3A%2F%2Fcom.ft.imagepublish.prod-us.s3.amazonaws.com%2F0189a262-b7f3-11e6-961e-a1acd97f622d?source=next&fit=scale-down&width=700" style="width:40px;height:40px;"></td>
+                <td><a href="https://www.ft.com/content/7c75e0b8-b7f2-11e6-ba85-95d1533d9a62" target=_"new"><b>Trump warns companies of ‘consequences’ of moving US jobs abroad</b></a><br>
+                Carrier workers are told about deal to stop hundreds of positions going to Mexico</td>
+            </tr>
+            <tr>
+                <td>[img]</td>
+                <td><a href="#"><b>[Title]</b></a><br>
+                [Intro]</td>
             </tr>
         </tbody>
     </table>
