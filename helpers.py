@@ -87,10 +87,6 @@ def transactions_display(shares, cash):
 def lookupArticles(geo):
     """Looks up articles for geo."""
 
-    # check cache for geo
-    # if geo in lookup.cache:
-    #     return lookup.cache[geo]
-
     # get feed from Google
     feed = feedparser.parse("http://news.google.com/news?geo={}&output=rss".format(urllib.parse.quote(geo, safe="")))
 
@@ -101,21 +97,18 @@ def lookupArticles(geo):
     news = []
     for i in feed["items"]:
         temp = {}
-        # print(json.dumps(i, indent=4))
         temp["title"] = i.title
         temp["link"] = i.link
-        # print(soup.prettify())
         try:
             value = i.summary_detail.value
             soup = BeautifulSoup(value, 'html.parser')
-            b = soup.findAll("font", size="-1")
-            temp["details"] = b[1].text
-            print(b[1])
+            detail = soup.findAll("font", size="-1")
+            temp["details"] = detail[1].text
+            temp["imgurl"] = soup.findAll("img")[0]['src']
         except Exception as e:
             print(e)
             # return "Could not find food data."
         news.append(temp)
-    print(json.dumps(news, indent=4))
     return news
 
     # # return results
