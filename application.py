@@ -37,7 +37,8 @@ def index():
     cash = db.execute("SELECT cash FROM users WHERE id = :uid", uid=session["user_id"])[0]["cash"]
     shares = db.execute("SELECT SUM(shares), symbol FROM transactions WHERE user_id = :uid GROUP BY symbol HAVING SUM(shares) > 0", uid=session["user_id"])
     transactions = transactions_display(shares, cash)
-    return render_template("index.html", total=transactions[1], cash=usd(cash), transactions=transactions[0])
+    news = lookupArticles("02138")
+    return render_template("index.html", total=transactions[1], cash=usd(cash), transactions=transactions[0], news=news)
 
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
@@ -339,6 +340,6 @@ def search():
 def articles():
     """Look up articles for geo."""
 
-    articles = lookup(request.args.get('geo'))
-        
+    articles = lookup("request.args.get('geo')")
+    
     return jsonify(articles)
