@@ -310,3 +310,27 @@ def addcash():
     # else if user reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("addcash.html")
+
+@app.route("/search", methods=["GET", "POST"])
+@login_required
+def search():
+    """Search for company, industry or geography"""
+    
+    # if user reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        # check that user input prompt
+        if not request.form.get("prompt"):
+            return apology("No prompt", "input")
+
+        # redirect based on button
+        if request.form.get("button") == "company":
+            return apology("You pressed", "company")
+        if request.form.get("button") == "industry":
+            return apology("You pressed", "industry")
+        if request.form.get("button") == "geography":
+            return apology("You pressed", "geography")
+    
+    # else if user reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("search.html")
