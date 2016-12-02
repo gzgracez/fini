@@ -10,24 +10,9 @@
 
     <table class="table table-striped">
         <tbody>
-            <!-- <tr>
-                <td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/http%3A%2F%2Fcom.ft.imagepublish.prod-us.s3.amazonaws.com%2Fdf2da30e-b7d8-11e6-961e-a1acd97f622d?source=next&fit=scale-down&width=700" style="width:40px;height:40px;"></td>
-                <td><a href="https://www.ft.com/content/74a8fd76-b58a-11e6-961e-a1acd97f622d" target=_"new"><b>Angela Merkel: ‘Her life’s work is in danger’</b></a><br>
-                Can the chancellor’s re-election campaign counter the anger over immigration?</td>
-            </tr> -->
-            <tr>
-                <td><img src="https://www.ft.com/__origami/service/image/v2/images/raw/http%3A%2F%2Fcom.ft.imagepublish.prod-us.s3.amazonaws.com%2F0189a262-b7f3-11e6-961e-a1acd97f622d?source=next&fit=scale-down&width=700" style="width:40px;height:40px;"></td>
-                <td><a href="https://www.ft.com/content/7c75e0b8-b7f2-11e6-ba85-95d1533d9a62" target=_"new"><b>Trump warns companies of ‘consequences’ of moving US jobs abroad</b></a><br>
-                Carrier workers are told about deal to stop hundreds of positions going to Mexico</td>
-            </tr>
-            <tr>
-                <td>[img]</td>
-                <td><a href="#"><b>[Title]</b></a><br>
-                [Intro]</td>
-            </tr>
         {% for n in news %}
             <tr>
-                <td><img src="http:{{ n.imgurl }}" width="40px" height="40px"></td>
+                <td><img src="http:{{ n.imgurl }}" max-width="40px" max-height="40px"></td>
                 <td><a href="{{ n.link }}" target=_"new"><b>{{ n.title }}</b></a><br>
                 {{ n.details }}</td>
             </tr>
