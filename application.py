@@ -334,3 +334,11 @@ def search():
     # else if user reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("search.html")
+
+@app.route("/articles")
+def articles():
+    """Look up articles for geo."""
+
+    articles = lookup(request.args.get('geo'))
+        
+    return jsonify(articles)
