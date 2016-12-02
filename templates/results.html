@@ -1,18 +1,18 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Home
+    Search
 {% endblock %}
 
 {% block main %}
     <center><img src="static/fini_black.png" style="width:150px;height:150px;"></center>
-    <h4>News</h4>
+    <h4>Industry</h4>
 
     <table class="table table-striped">
         <tbody>
         {% for n in news %}
             <tr>
-                <td><img src="http:{{ n.imgurl }}" style="min-width:40px;min-height:40px"></td>
+                <td><img src="http:{{ n.imgurl }}" max-width="40px" max-height="40px"></td>
                 <td><a href="{{ n.link }}" target=_"new"><b>{{ n.title }}</b></a><br>
                 {{ n.details }}</td>
             </tr>

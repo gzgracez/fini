@@ -84,11 +84,13 @@ def transactions_display(shares, cash):
         i["name"] = info["name"]
     return [shares, usd(total)]
 
-def lookupArticles(geo):
+def lookupArticles(geo = "", q = ""):
     """Looks up articles for geo."""
 
     # get feed from Google
-    feed = feedparser.parse("http://news.google.com/news?geo={}&output=rss".format(urllib.parse.quote(geo, safe="")))
+    # feed = feedparser.parse("http://news.google.com/news?geo={}&q={}&output=rss".format(urllib.parse.quote(geo, safe=""), urllib.parse.quote(q, safe="")))
+    print("http://news.google.com/news?geo={}&q={}&output=rss".format(geo, q))
+    feed = feedparser.parse("http://news.google.com/news?geo={}&q={}&output=rss".format(geo, q))
 
     # if no items in feed, get feed from Onion
     if not feed["items"]:
