@@ -390,3 +390,17 @@ def articles():
     articles = lookup("request.args.get('geo')")
     
     return jsonify(articles)
+
+@app.route("/results_comp", methods=["GET", "POST"])
+@login_required
+def results_comp():
+    """Search for company, industry or geography"""
+    
+    # if user reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        return apology("TODO")
+    
+    # else if user reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("results_comp.html")
