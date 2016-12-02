@@ -19,9 +19,6 @@ if app.config["DEBUG"]:
         response.headers["Pragma"] = "no-cache"
         return response
 
-# custom filter
-app.jinja_env.filters["usd"] = usd
-
 # configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_FILE_DIR"] = gettempdir()
 app.config["SESSION_PERMANENT"] = False
@@ -34,11 +31,8 @@ db = SQL("sqlite:///fini.db")
 @app.route("/")
 @login_required
 def index():
-    cash = db.execute("SELECT cash FROM users WHERE id = :uid", uid=session["user_id"])[0]["cash"]
-    shares = db.execute("SELECT SUM(shares), symbol FROM transactions WHERE user_id = :uid GROUP BY symbol HAVING SUM(shares) > 0", uid=session["user_id"])
-    transactions = transactions_display(shares, cash)
     news = lookupArticles("02138")
-    return render_template("index.html", total=transactions[1], cash=usd(cash), transactions=transactions[0], news=news)
+    return render_template("index.html", news=news)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -84,24 +78,6 @@ def logout():
 
     # redirect user to login form
     return redirect(url_for("login"))
-
-@app.route("/quote", methods=["GET", "POST"])
-@login_required
-def quote():
-    """Get stock quote."""
-    
-    # if user reached route via POST (as by submitting a form via POST)
-    if request.method == "POST":
-        if not request.form.get("symbol"):
-            return apology("must provide symbol")
-        info = lookup(request.form.get("symbol"))
-        if not info:
-            return apology("invalid symbol")
-        return render_template("quoted.html", name=info["name"], price=usd(info["price"]), symbol=info["symbol"])
-    
-    # else if user reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("quote.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -170,8 +146,6 @@ def search():
             if stock == None:
                 return apology("symbol not found")
             
-            stock["price"] = usd(stock["price"])
-            
             return render_template("results_comp.html", stock = stock, news = lookupArticles(q=request.form.get("prompt"))[:5])
 
         if request.form.get("button") == "industry":
@@ -237,17 +211,3 @@ def articles():
     articles = lookup("request.args.get('geo')")
     
     return jsonify(articles)
-
-@app.route("/results_comp", methods=["GET", "POST"])
-@login_required
-def results_comp():
-    """Search for company, industry or geography"""
-    
-    # if user reached route via POST (as by submitting a form via POST)
-    if request.method == "POST":
-
-        return apology("TODO")
-    
-    # else if user reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("results_comp.html")

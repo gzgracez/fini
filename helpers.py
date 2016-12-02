@@ -3,7 +3,11 @@ import feedparser
 import urllib.parse
 import urllib.request
 import json
+import cssselect
 
+from urllib.parse import urlencode, urlparse, parse_qs
+from lxml.html import fromstring
+from requests import get
 from flask import redirect, render_template, request, session, url_for
 from functools import wraps
 from bs4 import BeautifulSoup
@@ -36,7 +40,7 @@ def login_required(f):
     return decorated_function
 
 def lookup(symbol):
-    """Look up quote for symbol."""
+    """Look up stock."""
 
     # reject symbol if it starts with caret
     if symbol.startswith("^"):
@@ -46,7 +50,7 @@ def lookup(symbol):
     if "," in symbol:
         return None
 
-    # query Yahoo for quote
+    # query Yahoo for stock data
     # http://stackoverflow.com/a/21351911
     try:
         url = "http://download.finance.yahoo.com/d/quotes.csv?f=snl1mvj1re7&s={}".format(symbol)
@@ -56,45 +60,80 @@ def lookup(symbol):
     except:
         return None
 
-    # ensure stock exists
+    # ensure stock exists, and format
     try:
-        price = float(row[2])
+        price = usd(float(row[2]))
     except:
         return None
+
+    # format range
+    try: 
+        ranges = row[3].split(' - ')
+        range_low = usd(float(ranges[0]))
+        range_high = usd(float(ranges[1]))
+    except:
+        range_low = ""
+        range_high =""
+
+    # format volume
+    try:
+        volume = thousands(int(row[4]))
+    except:
+        volume = "-"
+
+
+    # get stock icon
+    icon = getIconUrl(row[1])
 
     # return stock's name (as a str), price (as a float), and (uppercased) symbol (as a str)
     return {
         "name": row[1],
         "price": price,
         "symbol": row[0].upper(),
-        "range": row[3],
-        "volume": row[4],
+        "range_low": range_low,
+        "range_high": range_high,
+        "volume": volume,
         "mcap": row[5],
         "peratio": row[6],
-        "eps": row[7]
+        "eps": row[7],
+        "icon": icon
     }
 
 def usd(value):
     """Formats value as USD."""
     return "${:,.2f}".format(value)
-    
-def transactions_display(shares, cash):
-    total = cash
-    for i in shares:
-        info = lookup(i["symbol"])
-        t = i["SUM(shares)"] * info["price"]
-        i["total"] = usd(t)
-        total += t
-        i["price"] = usd(info["price"])
-        i["name"] = info["name"]
-    return [shares, usd(total)]
+
+def thousands(value):
+    """Comma-seperates thousands."""
+    return "{0:,}".format(value)
+
+def getIconUrl(name):
+    """Return stock icon url."""
+
+    # get company url by use of Google search
+    # code from StuxCrystal (StackOverflow - http://stackoverflow.com/questions/38619478/google-search-web-scraping-with-python)
+    raw = get("https://www.google.com/search?q=" + name + "&num=1").text
+
+    page = fromstring(raw)
+
+    for result in page.cssselect(".r a"):
+        url = result.get("href")
+        if url.startswith("/url?"):
+            url = parse_qs(urlparse(url).query)['q']
+
+    # if no url is found, return None
+    if url[0] == "/":
+        return None
+
+    # get icon url by use of Clearbit (http://blog.clearbit.com/logo/)
+    return "//logo.clearbit.com/" + url[0]
+
 
 def lookupArticles(geo = "", q = ""):
     """Looks up articles for geo."""
 
-    # get feed from Google
+## Grace! Have a look!
     # feed = feedparser.parse("http://news.google.com/news?geo={}&q={}&output=rss".format(urllib.parse.quote(geo, safe=""), urllib.parse.quote(q, safe="")))
-    print("http://news.google.com/news?geo={}&q={}&output=rss".format(geo, q))
     feed = feedparser.parse("http://news.google.com/news?geo={}&q={}&output=rss".format(geo, q))
 
     # if no items in feed, get feed from Onion
