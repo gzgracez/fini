@@ -32,6 +32,11 @@ db = SQL("sqlite:///fini.db")
 @app.route("/")
 @login_required
 def index():
+
+    userCompany = db.execute("SELECT idCompany, name FROM userCompany INNER JOIN companies ON idCompany = id WHERE idUser = :idUser", idUser = session["user_id"])
+    userIndustry = db.execute("SELECT idIndustry, name FROM userIndustry INNER JOIN industries ON idIndustry = id WHERE idUser = :idUser", idUser = session["user_id"])
+    userGeography = db.execute("SELECT idGeo, name FROM userGeography INNER JOIN geographies ON idGeo = id WHERE idUser = :idUser", idUser = session["user_id"])
+    
     news = lookupArticles(topic="b")
     return render_template("index.html", news=news)
 
