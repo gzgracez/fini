@@ -258,9 +258,9 @@ def follow():
         if request.form.get("company"):
             db.execute("INSERT INTO userCompany (idUser, idCompany) VALUES (:idUser, :idCompany)", idUser = session["user_id"], idCompany = request.form.get("company"))
 
-        flash("Following" + "Apple")
+        flash("Following")
 
-        return redirect(url_for("results_comp"))
+        return redirect(url_for("index"))
 
         # url = "http://127.0.0.1:5000/search"
         # payload = {'prompt':'aapl', 'button':'company'}        
