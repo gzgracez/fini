@@ -156,7 +156,25 @@ def search():
                 flash("Symbol not found")
                 return render_template("search.html")
             
-            return render_template("results_comp.html", stock = stock, news = lookupArticles(q=request.form.get("prompt"))[:5])
+            # check whether user follow's company
+            # get company id
+            idCompany = db.execute("SELECT id FROM companies WHERE name = :name", name = stock["name"])
+
+            # if company is not in database, add it and get id
+            if len(idCompany) == 0:
+                idCompany = db.execute("INSERT INTO companies (name) VALUES (:name)", name = stock["name"])
+            else:
+                idCompany = idCompany[0]["id"]
+
+            # check if company is in user's interest
+            rows = db.execute("SELECT * FROM userCompany WHERE idUser = :idUser AND idCompany = :idCompany", idUser = session["user_id"], idCompany = idCompany)
+
+            if len(rows) == 0:
+                followed = False
+            else:
+                followed = True
+
+            return render_template("results_comp.html", stock = stock, idCompany = idCompany, followed = followed, news = lookupArticles(q=request.form.get("prompt"))[:5])
 
         if request.form.get("button") == "industry":
             return render_template("results.html", title="Industry", news = lookupArticles(q=request.form.get("prompt")))
@@ -237,30 +255,11 @@ def follow():
 
         # if request to follow company
         if request.form.get("company"):
+            db.execute("INSERT INTO userCompany (idUser, idCompany) VALUES (:idUser, :idCompany)", idUser = session["user_id"], idCompany = request.form.get("company"))
 
-            name = 'Sander' #request.form.get("company")
-            print(name)
-
-            # get company_id
-            idCompany = db.execute("SELECT id FROM companies WHERE name = :name", name = name)
-
-            print(idCompany)
-
-            # if company is not in database, add it and get id
-            if len(idCompany) == 0:
-                idCompany = db.execute("INSERT INTO companies (name) VALUES (:name)", name = name)
-            else:
-                idCompany = idCompany[0]["id"]
-
-            print(idCompany)
-
-            # add company to user's followed companies
-            db.execute("INSERT INTO userCompany (idUser, idCompany) VALUES (:idUser, :idCompany)", idUser = session["user_id"], idCompany = idCompany)
+        flash("Followed!")
 
         return render_template("index.html")
-
-    return render_template("index.html")
-
 
 
 

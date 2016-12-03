@@ -9,9 +9,15 @@
 
     <form action="/follow" method="post">
         <fieldset>
-            <div class="form-group">
-                <button class="btn btn-default" type="submit" name="company" value={{ stock["name"] }}>Follow</button>
-            </div>
+            {% if not followed %}
+                <div class="form-group">
+                    <button class="btn btn-default" type="submit" name="company" value={{ idCompany }}>Follow</button>
+                </div>
+            {% else %}
+                <div class="form-group">
+                    <button class="btn btn-default" type="submit" name="company" value={{ stock["name"] }}>Unfollow</button>
+                </div>
+            {% endif %}
         </fieldset>
     </form>
     
