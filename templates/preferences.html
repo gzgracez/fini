@@ -1,25 +1,29 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Results
+    Preferences
 {% endblock %}
 
 {% block main %}
-    <h5>Interests</h5>
+    <h5>Preferences</h5>
     <div class="col-lg-4">
     <b>Companies</b>
     <table class="table table-striped">
         <tbody>
-            {% for company in userCompany %}
-                <tr>
-                    <td>{{ company["name"] }}</td>
-                    <td>
-                        <form action="{{ url_for('follow') }}" method="post">
-                                        <button class="btn btn-default" type="submit" name="idCompany" value={{ company["idCompany"] }}>X</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
+            {% if userCompany == [] %}
+                <br><i>No company preferences</i>
+            {% else %}
+                {% for company in userCompany %}
+                    <tr>
+                        <td>{{ company["name"] }}</td>
+                        <td>
+                            <form action="{{ url_for('follow') }}" method="post">
+                                            <button class="btn btn-default" type="submit" name="idCompany" value={{ company["idCompany"] }}>X</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
         </tbody>
     </table>
     </div>
@@ -27,16 +31,20 @@
     <b>Industries</b>
     <table class="table table-striped">
         <tbody>
-            {% for industry in userIndustry %}
-                <tr>
-                    <td>{{ industry["name"] }}</td>
-                    <td>
-                        <form action="{{ url_for('follow') }}" method="post">
-                                        <button class="btn btn-default" type="submit" name="idIndustry" value={{ company["idIndustry"] }}>X</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
+            {% if userIndustry == [] %}
+                <br><i>No industry preferences.</i>
+            {% else %}
+                {% for industry in userIndustry %}
+                    <tr>
+                        <td>{{ industry["name"] }}</td>
+                        <td>
+                            <form action="{{ url_for('follow') }}" method="post">
+                                            <button class="btn btn-default" type="submit" name="idIndustry" value={{ company["idIndustry"] }}>X</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
         </tbody>
     </table>
     </div>
@@ -44,17 +52,22 @@
     <b>Geographies</b>
     <table class="table table-striped">
         <tbody>
-            {% for geography in userGeography %}
-                <tr>
-                    <td>{{ geography["name"] }}</td>
-                    <td>
-                        <form action="{{ url_for('follow') }}" method="post">
-                                        <button class="btn btn-default" type="submit" name="idGeography" value={{ company["idGeography"] }}>X</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
+            {% if userGeography == [] %}
+                <br><i>No geography preferences.</i>
+            {% else %}
+                {% for geography in userGeography %}
+                    <tr>
+                        <td>{{ geography["name"] }}</td>
+                        <td>
+                            <form action="{{ url_for('follow') }}" method="post">
+                                            <button class="btn btn-default" type="submit" name="idGeography" value={{ company["idGeography"] }}>X</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
         </tbody>
     </table>
     </div>
+    <br>
 {% endblock %}
