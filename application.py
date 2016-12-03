@@ -46,18 +46,21 @@ def login():
 
         # ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username")
+            flash("Must provide username")
+            return render_template("login.html")
 
         # ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password")
+            flash("Must provide password")
+            return render_template("login.html")
 
         # query database for username
         rows = db.execute("SELECT * FROM users WHERE username = :username", username=request.form.get("username"))
         
         # ensure username exists and password is correct
         if len(rows) != 1 or not pwd_context.verify(request.form.get("password"), rows[0]["hash"]):
-            return apology("invalid username and/or password")
+            flash("Invalid username and/or password")
+            return render_template("login.html")
 
         # remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -91,24 +94,29 @@ def register():
 
         # ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username")
+            flash("Must provide username")
+            return render_template("register.html")
 
         # ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password")
+            flash("Must provide password")
+            return render_template("register.html")
             
         # ensure password was confirmed
         elif not request.form.get("confirmation"):
-            return apology("must confirm password")
+            flash("Must confirm password")
+            return render_template("register.html")
             
         # ensure confirmed password is the same
         elif request.form.get("confirmation") != request.form.get("password"):
-            return apology("confirmed password does not match")
+            flash("Confirmed password does not match!")
+            return render_template("register.html")
 
         # check username doesn't already exist
         repeated = db.execute("SELECT * FROM users WHERE username = :username", username=request.form.get("username"))
         if len(repeated) > 0:
-            return apology("username is already taken")
+            flash("Username is already taken!")
+            return render_template("register.html")
             
         # query database for username
         rows = db.execute("INSERT INTO users (username, hash) VALUES (:username, :pwhash)", 
@@ -136,7 +144,8 @@ def search():
 
         # check that user input prompt
         if not request.form.get("prompt"):
-            return apology("No prompt", "input")
+            flash("Must provide search criteria")
+            return render_template("search.html")
 
         # redirect based on button
         if request.form.get("button") == "company":
@@ -144,7 +153,8 @@ def search():
             stock = lookup(request.form.get("prompt"))
             
             if stock == None:
-                return apology("symbol not found")
+                flash("Symbol not found")
+                return render_template("search.html")
             
             return render_template("results_comp.html", stock = stock, news = lookupArticles(q=request.form.get("prompt"))[:5])
 
@@ -170,16 +180,19 @@ def account():
 
             # ensure all fields were filled
             if not request.form.get("username"):
-                return apology("Grazzzzze required")
+                flash("Username required")
+                return render_template("account.html")
             
             # update username
             db.execute("UPDATE users SET username = :username WHERE id = :id", username = request.form.get("username"), id = session["user_id"])
+            flash("Username Changed!")
 
         if request.form.get("btn") == "password":
 
             # ensure all fields were filled
             if not request.form.get("old") or not request.form.get("new") or not request.form.get("newr"):
-                return apology("all fields required")
+                flash("All fields required")
+                return render_template("account.html")
                 
             old = request.form.get("old")
             new = request.form.get("new")
@@ -188,16 +201,19 @@ def account():
             # check old password
             if not pwd_context.verify(request.form.get("old"), db.execute("SELECT hash FROM users WHERE id = :id",
                 id = session["user_id"])[0]["hash"]):
-                    return apology("incorrect old password")
+                    flash("Incorrect previous password")
+                    return render_template("account.html")
                 
             # check that new passwords match
             elif new != newr:
-                return apology("new passwords do not match")
+                flash("Passwords do not match")
+                return render_template("account.html")
             
             # update password
             db.execute("UPDATE users SET hash = :hash WHERE id = :id", hash = pwd_context.encrypt(new), id = session["user_id"])
-            
+            flash("Password Changed!")
         # return to password window
+        
         return render_template("account.html")
     
     # else if user reached route via GET (as by clicking a link or via redirect)
