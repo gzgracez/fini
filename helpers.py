@@ -110,17 +110,19 @@ def thousands(value):
 
 def getIconUrl(symbol):
     """Return stock icon url."""
+    if symbol in logoCache:
+        return logoCache[symbol]
     url = "http://www.google.com/search?q=ticker+" + symbol
     request = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     website = urllib.request.urlopen(request)
     soup = BeautifulSoup(website.read(), 'html.parser')
     try:
         img = soup.findAll('img', {'style': 'margin-left:0px;margin-right:0px'})[0]['src']
-        print(img)
-        return img
+        logoCache[symbol] = img
     except Exception as e:
         print(e)
-    return None
+        logoCache[symbol] = None
+    return logoCache[symbol]
 
 def lookupArticles(geo="", q="", topic=""):
     """Looks up articles for geo."""
@@ -149,8 +151,5 @@ def lookupArticles(geo="", q="", topic=""):
         news.append(temp)
     return news
 
-    # # return results
-    # return lookup.cache[geo]
-
-# # initialize cache
-# lookup.cache = {}
+# initialize cache
+logoCache = {}
