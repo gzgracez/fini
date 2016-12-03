@@ -132,7 +132,6 @@ def getIconUrl(name):
 def lookupArticles(geo="", q="", topic=""):
     """Looks up articles for geo."""
 
-## Grace! Have a look!
     # feed = feedparser.parse("http://news.google.com/news?geo={}&q={}&output=rss".format(urllib.parse.quote(geo, safe=""), urllib.parse.quote(q, safe="")))
     feed = feedparser.parse("http://news.google.com/news?geo={}&q={}&topic={}&output=rss".format(geo, q, topic))
 
