@@ -83,7 +83,8 @@ def lookup(symbol):
 
 
     # get stock icon
-    icon = getIconUrl(row[1])
+    # icon = getIconUrl(row[1])
+    icon = getIconUrl(symbol)
 
     # return stock's name (as a str), price (as a float), and (uppercased) symbol (as a str)
     return {
@@ -107,27 +108,19 @@ def thousands(value):
     """Comma-seperates thousands."""
     return "{0:,}".format(value)
 
-def getIconUrl(name):
+def getIconUrl(symbol):
     """Return stock icon url."""
-
-    # get company url by use of Google search
-    # code from StuxCrystal (StackOverflow - http://stackoverflow.com/questions/38619478/google-search-web-scraping-with-python)
-    raw = get("https://www.google.com/search?q=" + name + "&num=1").text
-
-    page = fromstring(raw)
-
-    for result in page.cssselect(".r a"):
-        url = result.get("href")
-        if url.startswith("/url?"):
-            url = parse_qs(urlparse(url).query)['q']
-
-    # if no url is found, return None
-    if url[0] == "/":
-        return None
-
-    # get icon url by use of Clearbit (http://blog.clearbit.com/logo/)
-    return "//logo.clearbit.com/" + url[0]
-
+    url = "http://www.google.com/search?q=ticker+" + symbol
+    request = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    website = urllib.request.urlopen(request)
+    soup = BeautifulSoup(website.read(), 'html.parser')
+    try:
+        img = soup.findAll('img', {'style': 'margin-left:0px;margin-right:0px'})[0]['src']
+        print(img)
+        return img
+    except Exception as e:
+        print(e)
+    return None
 
 def lookupArticles(geo="", q="", topic=""):
     """Looks up articles for geo."""
