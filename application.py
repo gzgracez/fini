@@ -4,6 +4,7 @@ from flask_session import Session
 from passlib.apps import custom_app_context as pwd_context
 from tempfile import gettempdir
 import re
+import requests
 
 from helpers import *
 
@@ -257,9 +258,15 @@ def follow():
         if request.form.get("company"):
             db.execute("INSERT INTO userCompany (idUser, idCompany) VALUES (:idUser, :idCompany)", idUser = session["user_id"], idCompany = request.form.get("company"))
 
-        flash("Followed!")
+        flash("Following" + "Apple")
 
-        return render_template("index.html")
+        return redirect(url_for("results_comp"))
+
+        # url = "http://127.0.0.1:5000/search"
+        # payload = {'prompt':'aapl', 'button':'company'}        
+        # r = requests.post(url, data = payload)
+        # with open("results_comp.html", "w") as f:
+        #     f.write(r.content)
 
 
 
