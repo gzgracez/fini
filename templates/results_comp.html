@@ -7,15 +7,15 @@
 {% block main %}
     <h4>{{ stock["name"] }}, {{ stock["symbol"] }}</h4>
 
-    <form action="/follow" method="post">
+    <form method="post">
         <fieldset>
             {% if not followed %}
                 <div class="form-group">
-                    <button class="btn btn-default" type="submit" name="company" value={{ idCompany }}>Follow</button>
+                    <button class="btn btn-default" type="submit" id="company" name="company" value={{ idCompany }}>Follow</button>
                 </div>
             {% else %}
                 <div class="form-group">
-                    <button class="btn btn-default" type="submit" name="company" value={{ stock["name"] }}>Unfollow</button>
+                    <button class="btn btn-default" type="submit" id="company" name="company" value={{ stock["name"] }}>Unfollow</button>
                 </div>
             {% endif %}
         </fieldset>
@@ -85,4 +85,41 @@
             </table>
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
+    <script>
+      var follow = false;
+      if (document.getElementById("company").innerHTML = "Follow") {
+        follow = true;
+      }
+      document.getElementById("company").addEventListener("click", function(e) {
+          e.preventDefault();
+          $.ajax({
+            type: "POST",
+            url: "/followUpdate?id={{ idCompany }}&follow=" + follow,
+            timeout: 2000,
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function() {
+              // console.log ("BEFORE FOLLOW SEND");
+            },
+            complete: function() {
+              // console.log ("COMPLETE FOLLOW LOADING");
+            },
+            success: function(data) {
+              if (follow) {
+                document.getElementById("company").innerHTML = "Unfollow";
+                follow = false;
+              }
+              else {
+                document.getElementById("company").innerHTML = "Follow";
+                follow = true;
+              }
+              // console.log ("SUCCESS FOLLOW LOADING");
+            },
+            fail: function() {
+              // console.log("FOLLOW FAILED");
+            }
+          });
+      });
+    </script>
 {% endblock %}
