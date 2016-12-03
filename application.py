@@ -251,3 +251,12 @@ def followUpdate():
             db.execute("DELETE FROM userCompany WHERE idUser=:idUser AND idCompany=:idCompany", idUser = session["user_id"], idCompany = request.args.get('id'))
             print("DELETED")
     return "update"
+    
+@app.route("/preferences")
+def preferences():
+    """Change preferences."""
+
+    userCompany = db.execute("SELECT idCompany, name FROM userCompany INNER JOIN companies ON idCompany = id WHERE idUser = :idUser", idUser = session["user_id"])
+    userIndustry = db.execute("SELECT idIndustry, name FROM userIndustry INNER JOIN industries ON idIndustry = id WHERE idUser = :idUser", idUser = session["user_id"])
+    userIndustry = db.execute("SELECT idGeography, name FROM userGeography INNER JOIN geographies ON idGeography = id WHERE idUser = :idUser", idUser = session["user_id"])
+    return render_template("preferences.html", userCompany = userCompany, userIndustry = userIndustry, userGeography = userGeography)
