@@ -239,36 +239,19 @@ def account():
     else:
         return render_template("account.html")
 
-@app.route("/articles")
-def articles():
-    """Look up articles for geo."""
-
-    articles = lookup("request.args.get('geo')")
-    
-    return jsonify(articles)
-
-@app.route("/follow", methods=["GET", "POST"])
-def follow():
+@app.route("/followUpdate", methods=["POST"])
+@login_required
+def followUpdate():
     """Add to interests."""
-
-    # if user reached route via POST (as by submitting a form via POST)
-    if request.method == "POST":
-
-        # if request to follow company
-        if request.form.get("company"):
-            db.execute("INSERT INTO userCompany (idUser, idCompany) VALUES (:idUser, :idCompany)", idUser = session["user_id"], idCompany = request.form.get("company"))
-
-        flash("Following")
-
-        return redirect(url_for("index"))
-
-        # url = "http://127.0.0.1:5000/search"
-        # payload = {'prompt':'aapl', 'button':'company'}        
-        # r = requests.post(url, data = payload)
-        # with open("results_comp.html", "w") as f:
-        #     f.write(r.content)
-
-
+    if request.args.get('id') and request.args.get('follow'):
+        if request.args.get('follow') == "true":
+            db.execute("INSERT INTO userCompany (idUser, idCompany) VALUES (:idUser, :idCompany)", idUser = session["user_id"], idCompany = request.args.get('id'))
+            print("INSERTED")
+        else:
+            db.execute("DELETE FROM userCompany WHERE idUser=:idUser AND idCompany=:idCompany", idUser = session["user_id"], idCompany = request.args.get('id'))
+            print("DELETED")
+    return "update"
+    
 @app.route("/preferences")
 def preferences():
     """Change preferences."""
@@ -277,15 +260,3 @@ def preferences():
     userIndustry = db.execute("SELECT idIndustry, name FROM userIndustry INNER JOIN industries ON idIndustry = id WHERE idUser = :idUser", idUser = session["user_id"])
     userGeography = db.execute("SELECT idGeo, name FROM userGeography INNER JOIN geographies ON idGeo = id WHERE idUser = :idUser", idUser = session["user_id"])
     return render_template("preferences.html", userCompany = userCompany, userIndustry = userIndustry, userGeography = userGeography)
-
-
-
-
-
-
-
-
-
-
-
-
