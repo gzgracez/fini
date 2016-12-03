@@ -15,7 +15,7 @@
                 </div>
             {% else %}
                 <div class="form-group">
-                    <button class="btn btn-default" type="submit" id="company" name="company" value={{ stock["name"] }}>Unfollow</button>
+                    <button class="btn btn-default" type="submit" id="company" name="company" value={{ idCompany }}>Unfollow</button>
                 </div>
             {% endif %}
         </fieldset>
@@ -89,7 +89,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
     <script>
       var follow = false;
-      if (document.getElementById("company").innerHTML = "Follow") {
+      if (document.getElementById("company").innerHTML == "Follow") {
         follow = true;
       }
       document.getElementById("company").addEventListener("click", function(e) {
