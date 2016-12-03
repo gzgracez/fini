@@ -31,7 +31,7 @@ db = SQL("sqlite:///fini.db")
 @app.route("/")
 @login_required
 def index():
-    news = lookupArticles("02138")
+    news = lookupArticles(topic="b")
     return render_template("index.html", news=news)
 
 @app.route("/login", methods=["GET", "POST"])
