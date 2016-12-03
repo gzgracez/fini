@@ -6,66 +6,75 @@
 
 {% block main %}
     <h4>{{ stock["name"] }}, {{ stock["symbol"] }}</h4>
-    <br>
-        <div class="container-fluid">
-    {% if stock["icon"] == None %}
-            <div>
-    {% else %}
-            <div class="col-lg-6">
-                <br>
-                <img src='{{ stock["icon"] }}' style="max-width: 300px;max-height: 300px">
-                <br>
-                <br>
+
+    <form action="/follow" method="post">
+        <fieldset>
+            <div class="form-group">
+                <button class="btn btn-default" type="submit" name="company" value={{ stock["name"] }}>Follow</button>
             </div>
-            <div class="row">
+        </fieldset>
+    </form>
+    
+    <div class="container-fluid">
+        {% if stock["icon"] == None %}
+                <div>
+        {% else %}
                 <div class="col-lg-6">
-    {% endif %}
-                    <div class="pull-left"><h5>Metrics</h5></div>
-                    <table class="table table-striped">
-                        <tbody>
-                            <tr>
-                                <td><b>Price</b></td>
-                                <td>{{ stock["price"] }}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Day's Range</b></td>
-                                <td>{{ stock["range_low"] }} - {{ stock["range_high"] }}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Volume</b></td>
-                                <td>{{ stock["volume"] }}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Market Cap</b></td>
-                                <td>{{ stock["mcap"] }}</td>
-                            </tr>
-                            <tr>
-                                <td><b>PE Ratio</b></td>
-                                <td>{{ stock["peratio"] }}</td>
-                            </tr>
-                            <tr>
-                                <td><b>EPS Estimate Current Year</b></td>
-                                <td>{{ stock["eps"] }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <br>
+                    <img src='{{ stock["icon"] }}' style="max-width: 300px;max-height: 300px">
+                    <br>
+                    <br>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+        {% endif %}
+                        <div class="pull-left"><h5>Metrics</h5></div>
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <td><b>Price</b></td>
+                                    <td>{{ stock["price"] }}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Day's Range</b></td>
+                                    <td>{{ stock["range_low"] }} - {{ stock["range_high"] }}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Volume</b></td>
+                                    <td>{{ stock["volume"] }}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Market Cap</b></td>
+                                    <td>{{ stock["mcap"] }}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>PE Ratio</b></td>
+                                    <td>{{ stock["peratio"] }}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>EPS Estimate Current Year</b></td>
+                                    <td>{{ stock["eps"] }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-    <div class="pull-left"><h5>News on {{ stock["name"] }}</h5></div>
-    <table class="table table-striped">
-        <tbody>
-            {% for n in news %}
-                <tr>
-                    {% if not n.imgurl %}
-                        <td><img src="static/news.png" style="width:40px;height:40px"></td>
-                    {% else %}
-                        <td><img src="http:{{ n.imgurl }}" style="min-width:40px;min-height:40px"></td>
-                    {% endif %}
-                    <td><a href="{{ n.link }}" target=_"new"><b>{{ n.title }}</b></a><br>
-                    {{ n.details }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <div class="pull-left"><h5>News on {{ stock["name"] }}</h5></div>
+        <table class="table table-striped">
+            <tbody>
+                {% for n in news %}
+                    <tr>
+                        {% if not n.imgurl %}
+                            <td><img src="static/news.png" style="width:40px;height:40px"></td>
+                        {% else %}
+                            <td><img src="http:{{ n.imgurl }}" style="min-width:40px;min-height:40px"></td>
+                        {% endif %}
+                        <td><a href="{{ n.link }}" target=_"new"><b>{{ n.title }}</b></a><br>
+                        {{ n.details }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

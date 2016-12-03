@@ -211,3 +211,51 @@ def articles():
     articles = lookup("request.args.get('geo')")
     
     return jsonify(articles)
+
+@app.route("/follow", methods=["GET", "POST"])
+def follow():
+    """Add to interests."""
+
+    # if user reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        # if request to follow company
+        if request.form.get("company"):
+
+            name = request.form.get("company")
+            print(name)
+
+            # get company_id
+            idCompany = db.execute("SELECT * FROM companies WHERE name = :name", name = name)
+
+            print(idCompany)
+
+            # if company is not in database, add it and get id
+            if len(idCompany) == 0:
+                newId = db.execute("INSERT INTO companies (name) VALUES ('Google')")#, name = name)
+                # idCompany = db.execute("SELECT * FROM companies WHERE name = :name", name = name)
+                print(newId)
+            else:
+                idCompany = idCompany[0]
+
+            # add company to user's followed companies
+            db.execute("INSERT INTO userCompany (idUser, idCompany) VALUES (:idUser, :idCompany)", idUser = session["user_id"], idCompany = idCompany)
+
+        return render_template("index.html")
+
+    return render_template("index.html")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
