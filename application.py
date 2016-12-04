@@ -33,21 +33,22 @@ db = SQL("sqlite:///fini.db")
 @login_required
 def index():
 
-    # # load user's preferences
-    # q = db.execute("SELECT idCompany, name FROM userCompany INNER JOIN companies ON idCompany = id WHERE idUser = :idUser", idUser = session["user_id"])
-    # print(q)
-    # q += db.execute("SELECT idIndustry, name FROM userIndustry INNER JOIN industries ON idIndustry = id WHERE idUser = :idUser", idUser = session["user_id"])
-    # print(q)
-    # geo = db.execute("SELECT idGeo, name FROM userGeography INNER JOIN geographies ON idGeo = id WHERE idUser = :idUser", idUser = session["user_id"])
-    # print(geo)
+    # load user's preferences
+    q_prefs = db.execute("SELECT name FROM userCompany INNER JOIN companies ON idCompany = id WHERE idUser = :idUser", idUser = session["user_id"])
+    q_prefs += db.execute("SELECT name FROM userIndustry INNER JOIN industries ON idIndustry = id WHERE idUser = :idUser", idUser = session["user_id"])
+    g_prefs = db.execute("SELECT idGeography, name FROM userGeography INNER JOIN geographies ON idGeography = id WHERE idUser = :idUser", idUser = session["user_id"])
 
-    # # if user has no preferences, render default selection
-    # if len(q) == 0 and len(geo) == 0:
-    #     news = lookupArticles(topic="b")
-    #     return render_template("index.html", news=news)
+    # if user has no preferences, render default selection
+    if len(q_prefs) == 0 and len(g_prefs) == 0:
+        news = lookupArticles(topic="b")
+        return render_template("index.html", news=news)
 
+    q = ""
     # iteratively load user preferences into query for lookupArticles
-    # for 
+    for i in q_prefs:
+        q += "OR" + i["name"]
+
+    print(q)
 
     news = lookupArticles(topic="b")
     return render_template("index.html", news=news)
@@ -195,9 +196,31 @@ def search():
             return render_template("results_comp.html", stock = stock, idCompany = idCompany, followed = followed, news = lookupArticles(q=request.form.get("prompt"))[:5])
 
         if request.form.get("button") == "industry":
-            return render_template("results.html", title="Industry", news = lookupArticles(q=request.form.get("prompt")))
+
+            name = request.form.get("prompt").capitalize()
+
+            # check whether user follow's company
+            # get company id
+            idIndustry = db.execute("SELECT id FROM industries WHERE name = :name", name = name)
+
+            # if company is not in database, add it and get id
+            if len(idIndustry) == 0:
+                idIndustry = db.execute("INSERT INTO industries (name) VALUES (:name)", name = name)
+            else:
+                idIndustry = idIndustry[0]["id"]
+
+            # check if company is in user's interest
+            rows = db.execute("SELECT * FROM userIndustry WHERE idUser = :idUser AND idIndustry = :idIndustry", idUser = session["user_id"], idIndustry = idIndustry)
+
+            if len(rows) == 0:
+                followed = False
+            else:
+                followed = True
+
+            return render_template("results.html", title="Industry: " + request.form.get("prompt").capitalize(), idGroup = idIndustry, group = "industry", followed = followed, news = lookupArticles(q=request.form.get("prompt")))
+
         if request.form.get("button") == "geography":
-            return render_template("results.html", title="Geography", news = lookupArticles(geo=request.form.get("prompt")))
+            return render_template("results.html", title="Geography: " + request.form.get("prompt").capitalize(), news = lookupArticles(geo=request.form.get("prompt")))
 
     # else if user reached route via GET (as by clicking a link or via redirect)
     else:
@@ -256,17 +279,17 @@ def account():
     else:
         return render_template("account.html")
 
-@app.route("/followCompany", methods=["POST"])
+@app.route("/followUpdate", methods=["POST"])
 @login_required
 def followUpdate():
-    """Add to interests."""
+    """Add/remove to/from interests."""
     if request.args.get('id') and request.args.get('follow'):
+        group = request.args.get('gr')
         if request.args.get('follow') == "true":
-            # if request.args.get('gr') == "company":
-            db.execute("INSERT INTO userCompany (idUser, idCompany) VALUES (:idUser, :idCompany)", idUser = session["user_id"], idCompany = request.args.get('id'))
+            db.execute("INSERT INTO user" + group + " (idUser, id" + group + ") VALUES (:idUser, :id)", idUser = session["user_id"], id = request.args.get('id'))
             print("INSERTED")
         else:
-            db.execute("DELETE FROM userCompany WHERE idUser=:idUser AND idCompany=:idCompany", idUser = session["user_id"], idCompany = request.args.get('id'))
+            db.execute("DELETE FROM user" + group + " WHERE idUser=:idUser AND id" + group + "=:id", idUser = session["user_id"], id = request.args.get('id'))
             print("DELETED")
     return "update"
     
@@ -276,5 +299,5 @@ def preferences():
 
     userCompany = db.execute("SELECT idCompany, name FROM userCompany INNER JOIN companies ON idCompany = id WHERE idUser = :idUser ORDER BY name ASC", idUser = session["user_id"])
     userIndustry = db.execute("SELECT idIndustry, name FROM userIndustry INNER JOIN industries ON idIndustry = id WHERE idUser = :idUser ORDER BY name ASC", idUser = session["user_id"])
-    userGeography = db.execute("SELECT idGeo, name FROM userGeography INNER JOIN geographies ON idGeo = id WHERE idUser = :idUser ORDER BY name ASC", idUser = session["user_id"])
+    userGeography = db.execute("SELECT idGeography, name FROM userGeography INNER JOIN geographies ON idGeography = id WHERE idUser = :idUser ORDER BY name ASC", idUser = session["user_id"])
     return render_template("preferences.html", userCompany = userCompany, userIndustry = userIndustry, userGeography = userGeography)

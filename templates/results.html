@@ -1,11 +1,25 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Search
+    {{ title }}
 {% endblock %}
 
 {% block main %}
-    <h4>{{ title }}</h4>
+    <h5>{{ title }}</h5>
+
+    <form method="post">
+        <fieldset>
+            {% if not followed %}
+                <div class="form-group">
+                    <button class="btn btn-default" type="submit" id="industry" name="industry" value={{ idGroup }}>Follow</button>
+                </div>
+            {% else %}
+                <div class="form-group">
+                    <button class="btn btn-default" type="submit" id="industry" name="industry" value={{ idGroup }}>Unfollow</button>
+                </div>
+            {% endif %}
+        </fieldset>
+    </form>
 
     <table class="table table-striped">
         <tbody>
@@ -24,4 +38,42 @@
     </table>
     <br>
     <br>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
+    <script>
+      var follow = false;
+      // var gr = {{ title }}.split(":",1);
+      if (document.getElementById("industry").innerHTML == "Follow") {
+        follow = true;
+      }
+      document.getElementById("industry").addEventListener("click", function(e) {
+          e.preventDefault();
+          $.ajax({
+            type: "POST",
+            url: "/followUpdate?id={{ idGroup }}&gr=Industry&follow=" + follow,
+            timeout: 2000,
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function() {
+              // console.log ("BEFORE FOLLOW SEND");
+            },
+            complete: function() {
+              // console.log ("COMPLETE FOLLOW LOADING");
+            },
+            success: function(data) {
+              if (follow) {
+                document.getElementById("industry").innerHTML = "Unfollow";
+                follow = false;
+              }
+              else {
+                document.getElementById("industry").innerHTML = "Follow";
+                follow = true;
+              }
+              // console.log ("SUCCESS FOLLOW LOADING");
+            },
+            fail: function() {
+              // console.log("FOLLOW FAILED");
+            }
+          });
+      });
+    </script>
 {% endblock %}

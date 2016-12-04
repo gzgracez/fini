@@ -96,7 +96,7 @@
           e.preventDefault();
           $.ajax({
             type: "POST",
-            url: "/followUpdate?id={{ idCompany }}&gr='company'&follow=" + follow,
+            url: "/followUpdate?id={{ idCompany }}&gr=Company&follow=" + follow,
             timeout: 2000,
             contentType: "application/json; charset=utf-8",
             beforeSend: function() {
