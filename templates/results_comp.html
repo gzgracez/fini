@@ -67,7 +67,7 @@
                 </div>
             </div>
         <div class="container">
-            <h5>News on {{ stock["name"] }}</h5>
+            <div class="pull-left"><h5>News on {{ stock["name"] }}</h5></div>
             <table class="table table-striped">
                 <tbody>
                     {% for n in news %}
@@ -85,7 +85,9 @@
             </table>
         </div>
     </div>
-
+    <br>
+    <br>
+    <br>
     <script>
       var follow = false;
       if (document.getElementById("company").innerHTML == "Follow") {

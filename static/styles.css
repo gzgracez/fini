@@ -3,7 +3,7 @@
     /* center contents */
     margin-left: auto;
     margin-right: auto;
-    text-align: left;
+    text-align: center;
 }
 
 main .form-control
@@ -26,10 +26,9 @@ form
     text-align: center;
 }
 
-.navbar-bottom
+table
 {
-    position:fixed;
-    bottom:0px;
+    text-align: left;   
 }
 
 .alert-info{background-color:#D0E8F6;border-color:#AED7EF;color:#245C7E}.alert-info hr{border-top-color:#D0E8F6}.alert-info .alert-link{color:#5C8CA7}
