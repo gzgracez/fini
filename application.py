@@ -324,7 +324,6 @@ def followUpdate():
             db.execute("INSERT INTO :userCat (idUser, :idCat) VALUES (:idUser, :id)", userCat = "user" + category, idCat = "id" + category, idUser = session["user_id"], id = request.args.get('id'))
             # print("INSERTED")
         else:
-            # db.execute("DELETE FROM :userCat WHERE idUser=:idUser AND :idCat=:id", userCat = "user" + category, idCat = "id" + category, idUser = session["user_id"], id = request.args.get('id'))
             deleteStr = "DELETE FROM {} WHERE idUser={} AND {}={}".format("user" + category, session["user_id"], "id" + category, request.args.get('id'))
             db.execute(deleteStr)
             # print("DELETED")

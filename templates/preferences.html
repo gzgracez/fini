@@ -17,7 +17,7 @@
                     <tr>
                         <td>{{ company["name"] }}</td>
                         <td>
-                            <form action="#" method="post">
+                            <form action="#" method="post" >
                                             <button class="btn btn-default" id="Company" type="submit" name="idCompany" value={{ company["idCompany"] }}>X</button>
                             </form>
                         </td>
@@ -70,47 +70,4 @@
     </table>
     </div>
     <br>
-    <script>
-      var category = ["Company", "Industry", "Geography"];
-
-      for (var i = 0; i < category.length; i++) {
-          document.getElementById(category[i]).addEventListener("click", unfollow(e, i));
-      }
-
-      function unfollow(i) {
-      var follow = false;
-      if (document.getElementById("{{ category }}").innerHTML == "Follow") {
-        follow = true;
-      }
-      document.getElementById("{{ category }}").addEventListener("click", function(e) {
-          e.preventDefault();
-          $.ajax({
-            type: "POST",
-            url: "/followUpdate?id={{ idGroup }}&category={{ category }}&follow=" + follow,
-            timeout: 2000,
-            contentType: "application/json; charset=utf-8",
-            beforeSend: function() {
-              // console.log ("BEFORE FOLLOW SEND");
-            },
-            complete: function() {
-              // console.log ("COMPLETE FOLLOW LOADING");
-            },
-            success: function(data) {
-              if (follow) {
-                document.getElementById("{{ category }}").innerHTML = "Unfollow";
-                follow = false;
-              }
-              else {
-                document.getElementById("{{ category }}").innerHTML = "Follow";
-                follow = true;
-              }
-              // console.log ("SUCCESS FOLLOW LOADING");
-            },
-            fail: function() {
-              // console.log("FOLLOW FAILED");
-            }
-          });
-        });
-      }
-    </script>
 {% endblock %}
