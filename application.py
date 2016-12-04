@@ -33,10 +33,22 @@ db = SQL("sqlite:///fini.db")
 @login_required
 def index():
 
-    userCompany = db.execute("SELECT idCompany, name FROM userCompany INNER JOIN companies ON idCompany = id WHERE idUser = :idUser", idUser = session["user_id"])
-    userIndustry = db.execute("SELECT idIndustry, name FROM userIndustry INNER JOIN industries ON idIndustry = id WHERE idUser = :idUser", idUser = session["user_id"])
-    userGeography = db.execute("SELECT idGeo, name FROM userGeography INNER JOIN geographies ON idGeo = id WHERE idUser = :idUser", idUser = session["user_id"])
-    
+    # # load user's preferences
+    # q = db.execute("SELECT idCompany, name FROM userCompany INNER JOIN companies ON idCompany = id WHERE idUser = :idUser", idUser = session["user_id"])
+    # print(q)
+    # q += db.execute("SELECT idIndustry, name FROM userIndustry INNER JOIN industries ON idIndustry = id WHERE idUser = :idUser", idUser = session["user_id"])
+    # print(q)
+    # geo = db.execute("SELECT idGeo, name FROM userGeography INNER JOIN geographies ON idGeo = id WHERE idUser = :idUser", idUser = session["user_id"])
+    # print(geo)
+
+    # # if user has no preferences, render default selection
+    # if len(q) == 0 and len(geo) == 0:
+    #     news = lookupArticles(topic="b")
+    #     return render_template("index.html", news=news)
+
+    # iteratively load user preferences into query for lookupArticles
+    # for 
+
     news = lookupArticles(topic="b")
     return render_template("index.html", news=news)
 
@@ -244,12 +256,13 @@ def account():
     else:
         return render_template("account.html")
 
-@app.route("/followUpdate", methods=["POST"])
+@app.route("/followCompany", methods=["POST"])
 @login_required
 def followUpdate():
     """Add to interests."""
     if request.args.get('id') and request.args.get('follow'):
         if request.args.get('follow') == "true":
+            # if request.args.get('gr') == "company":
             db.execute("INSERT INTO userCompany (idUser, idCompany) VALUES (:idUser, :idCompany)", idUser = session["user_id"], idCompany = request.args.get('id'))
             print("INSERTED")
         else:
@@ -259,7 +272,7 @@ def followUpdate():
     
 @app.route("/preferences")
 def preferences():
-    """Change preferences."""
+    """View/remove preferences."""
 
     userCompany = db.execute("SELECT idCompany, name FROM userCompany INNER JOIN companies ON idCompany = id WHERE idUser = :idUser ORDER BY name ASC", idUser = session["user_id"])
     userIndustry = db.execute("SELECT idIndustry, name FROM userIndustry INNER JOIN industries ON idIndustry = id WHERE idUser = :idUser ORDER BY name ASC", idUser = session["user_id"])
