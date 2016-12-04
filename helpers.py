@@ -130,10 +130,9 @@ def lookupArticles(geo="", q="", topic=""):
     # feed = feedparser.parse("http://news.google.com/news?geo={}&q={}&output=rss".format(urllib.parse.quote(geo, safe=""), urllib.parse.quote(q, safe="")))
     feed = feedparser.parse("http://news.google.com/news?geo={}&q={}&topic={}&output=rss".format(geo, q, topic))
 
-    # if no items in feed, get feed from Onion
+    # if no items in feed, get default business feed
     if not feed["items"]:
-        feed = feedparser.parse("http://www.theonion.com/feeds/rss")
-
+        feed = feedparser.parse("http://news.google.com/news?topic=b&output=rss")
     news = []
     for i in feed["items"]:
         temp = {}

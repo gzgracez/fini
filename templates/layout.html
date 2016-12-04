@@ -20,7 +20,7 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-default">
+        <nav class="navbar navbar-fixed-top navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <button aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar" data-toggle="collapse" type="button">
@@ -55,7 +55,9 @@
                 </div>
             </div>
         </nav>
-
+        <br>
+        <br>
+        <br>
         {% if get_flashed_messages() %}
             <header>
                 <div class="alert alert-info" id="placeholderSuccess" role="alert">
@@ -69,18 +71,14 @@
                 {% block main %}{% endblock %}
             </main>
         </div>
-        <br>
-        <br>
-        <nav class="navbar navbar-default navbar-fixed-bottom navbar-left navbar-bottom">
+        <nav class="navbar-default navbar-bottom">
             <div class="container-fluid">
-                <div class="navbar-header">
-                    <button aria-expanded="false" class="pull-left navbar-toggle collapsed" data-target="#bottom" data-toggle="collapse" type="button">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                </div>
+                <button aria-expanded="false" class="pull-left navbar-toggle collapsed" data-target="#bottom" data-toggle="collapse" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
                 <div class="collapse navbar-collapse" id="bottom">
                         <ul class="nav navbar-nav navbar-left">
                             <li><a href="#">About</a></li>

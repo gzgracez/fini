@@ -34,23 +34,37 @@ db = SQL("sqlite:///fini.db")
 def index():
 
     # load user's preferences
-    q_prefs = db.execute("SELECT name FROM userCompany INNER JOIN companies ON idCompany = id WHERE idUser = :idUser", idUser = session["user_id"])
-    q_prefs += db.execute("SELECT name FROM userIndustry INNER JOIN industries ON idIndustry = id WHERE idUser = :idUser", idUser = session["user_id"])
-    g_prefs = db.execute("SELECT idGeography, name FROM userGeography INNER JOIN geographies ON idGeography = id WHERE idUser = :idUser", idUser = session["user_id"])
+    c_prefs = db.execute("SELECT ticker FROM userCompany INNER JOIN companies ON idCompany = id WHERE idUser = :idUser", idUser = session["user_id"])
+    i_prefs = db.execute("SELECT name FROM userIndustry INNER JOIN industries ON idIndustry = id WHERE idUser = :idUser", idUser = session["user_id"])
+    g_prefs = db.execute("SELECT name FROM userGeography INNER JOIN geographies ON idGeography = id WHERE idUser = :idUser", idUser = session["user_id"])
 
     # if user has no preferences, render default selection
-    if len(q_prefs) == 0 and len(g_prefs) == 0:
+    if len(c_prefs) == 0 and len(i_prefs) == 0 and len(g_prefs) == 0:
         news = lookupArticles(topic="b")
         return render_template("index.html", news=news)
 
+    
+    # iteratively load user company and industry preferences into query for lookupArticles
     q = ""
-    # iteratively load user preferences into query for lookupArticles
-    for i in q_prefs:
-        q += "OR" + i["name"]
+    if len(c_prefs) > 0:
+        for i in c_prefs:
+            q += i["ticker"] + "+OR+"
+    if len(i_prefs) > 0:
+        for i in i_prefs:
+            q += i["name"] + "+OR+"
+        q = q[:-3]
+
+
+    # iteratively load user company and industry preferences into query for lookupArticles
+    geo = ""
+    if len(g_prefs) > 0:
+        for i in g_prefs:
+            geo += i["name"] + "OR"
+        geo = geo[:-2]
 
     print(q)
 
-    news = lookupArticles(topic="b")
+    news = lookupArticles(geo=geo, q=q)
     return render_template("index.html", news=news)
 
 @app.route("/login", methods=["GET", "POST"])
@@ -181,7 +195,7 @@ def search():
 
             # if company is not in database, add it and get id
             if len(idCompany) == 0:
-                idCompany = db.execute("INSERT INTO companies (name) VALUES (:name)", name = stock["name"])
+                idCompany = db.execute("INSERT INTO companies (name, ticker) VALUES (:name, :ticker)", name = stock["name"], ticker = stock["symbol"])
             else:
                 idCompany = idCompany[0]["id"]
 

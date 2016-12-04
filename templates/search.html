@@ -6,16 +6,34 @@
 
 {% block main %}
     <h5>Search</h5>
-    <form action="/search" method="post">
-        <fieldset>
-            <div class="form-group">
-                <input autocomplete="off" autofocus class="form-control" name="prompt" type="text" size="28"/>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-default btn-xs" type="submit" name="button" value="company">Company</button>
-                <button class="btn btn-default btn-xs" type="submit" name="button" value="industry">Industry</button>
-                <button class="btn btn-default btn-xs" type="submit" name="button" value="geography">Geography</button>
-            </div>
-        </fieldset>
-    </form>
+    <div class="col-lg-6">
+        <form action="/search" method="post">
+            <fieldset>
+                <div class="form-group">
+                    <input autocomplete="off" autofocus class="form-control" name="prompt" type="text" size="28"/>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-default btn-xs" type="submit" name="button" value="company">Company</button>
+                    <button class="btn btn-default btn-xs" type="submit" name="button" value="industry">Industry</button>
+                    <button class="btn btn-default btn-xs" type="submit" name="button" value="geography">Geography</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-lg-6">
+        <form action="/search" method="post">
+            <fieldset>
+                <div class="form-group">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example<span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                        <li><a href="#">HTML</a></li>
+                        <li><a href="#">CSS</a></li>
+                        <li><a href="#">JavaScript</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
 {% endblock %}
