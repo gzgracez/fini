@@ -231,7 +231,7 @@ def search():
             else:
                 followed = True
 
-            return render_template("results.html", title="Industry: " + request.form.get("prompt").capitalize(), idGroup = idIndustry, category = "Industry", followed = followed, news = lookupArticles(q=request.form.get("prompt")))
+            return render_template("results.html", title="Industry: " + name, idGroup = idIndustry, category = "Industry", followed = followed, news = lookupArticles(q=request.form.get("prompt")))
 
         if request.form.get("button") == "geography":
 
@@ -255,7 +255,7 @@ def search():
             else:
                 followed = True
 
-            return render_template("results.html", title="Geography: " + request.form.get("prompt").capitalize(), news = lookupArticles(geo=request.form.get("prompt")), category = "Geography", idGroup = idGeography)
+            return render_template("results.html", title="Geography: " + name, news = lookupArticles(geo=request.form.get("prompt")), category = "Geography", idGroup = idGeography)
 
     # else if user reached route via GET (as by clicking a link or via redirect)
     else:
@@ -322,11 +322,12 @@ def followUpdate():
     if request.args.get('id') and request.args.get('follow') and request.args.get('category'):
         if request.args.get('follow') == "true":
             db.execute("INSERT INTO :userCat (idUser, :idCat) VALUES (:idUser, :id)", userCat = "user" + category, idCat = "id" + category, idUser = session["user_id"], id = request.args.get('id'))
-            print("INSERTED")
+            # print("INSERTED")
         else:
-            print("DELETE FROM {} WHERE idUser={} AND {}={}".format("user" + category, session["user_id"], "id" + category, request.args.get('id')))
-            db.execute("DELETE FROM :userCat WHERE idUser=:idUser AND :idCat=:id", userCat = "user" + category, idCat = "id" + category, idUser = session["user_id"], id = request.args.get('id'))
-            print("DELETED")
+            # db.execute("DELETE FROM :userCat WHERE idUser=:idUser AND :idCat=:id", userCat = "user" + category, idCat = "id" + category, idUser = session["user_id"], id = request.args.get('id'))
+            deleteStr = "DELETE FROM {} WHERE idUser={} AND {}={}".format("user" + category, session["user_id"], "id" + category, request.args.get('id'))
+            db.execute(deleteStr)
+            # print("DELETED")
     return "update"
     
 @app.route("/preferences")
