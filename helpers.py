@@ -50,6 +50,9 @@ def lookup(symbol):
     if "," in symbol:
         return None
 
+    if not symbol.isalpha():
+        return None
+
     # query Yahoo for stock data
     # http://stackoverflow.com/a/21351911
     try:
