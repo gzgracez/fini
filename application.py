@@ -255,7 +255,7 @@ def search():
             else:
                 followed = True
 
-            return render_template("results.html", title="Geography: " + request.form.get("prompt").capitalize(), news = lookupArticles(geo=request.form.get("prompt")), category = "Geography")
+            return render_template("results.html", title="Geography: " + request.form.get("prompt").capitalize(), news = lookupArticles(geo=request.form.get("prompt")), category = "Geography", idGroup = idGeography)
 
     # else if user reached route via GET (as by clicking a link or via redirect)
     else:
