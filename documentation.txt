@@ -1,0 +1,7 @@
+Fini is an application
+
+
+Our application runs on Python 3. In order to run our application, you have to install the packages listed in requirements.txt: pip3 install -r requirements.txt. The environment configuration is located in export, so you can source the file to setup the configuration. You can then flask run to run the application locally on port 5000!
+
+
+Our application is also hosted on Heroku at: fini-gs.herokuapp.com with our Heroku configuration in our Procfile!

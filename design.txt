@@ -1,0 +1,16 @@
+	Fini is built on Flask, with an SQLite database, Bootstrap, JavaScript, jQuery, and Jinja. We have a user authentication system that allows users to change their usernames and passwords - the passwords are hashed and stored for security. 
+
+
+	Once logged in, we display the user’s home page, a page that displays aggregated news based on the user’s interests (the topics that they follow). We get our news through Google’s news RSS feed, webscraping to find the details of each article (as the details are in HTML within the RSS feed).
+
+
+	The user can also search for relevant financial information by 3 categories: Ticker, Industry, and Geography. 
+
+
+	When the user searches by Ticker, we display a page with relevant metrics and news. We similarly comb through Google’s news feed to get the news, displaying the top 5 news articles on the page. We webscrape Google search results to find the logo, caching it so that access will be faster next time the company is searched. And we get our metrics through Yahoo Finance’s csv file. On this page, we also allow the user to follow the company with our follow button. We used ajax so that the follow button sends a POST request to /followUpdate without refreshing the page, making Follow / Unfollow much faster than if we were to re-search this page to follow.
+
+
+	We provide similar functionality for search by Industry and Geography - for both, we display relevant news through Google’s news feed. We have similarly implemented follow with ajax so that the page is not refreshed. We provide a dropdown search for Geography so that users can search for true geographical locations. 
+
+
+	We also provide a Preferences page under Settings where users can see the Companies, Industries, and Geographies they are currently following, so they can more easily get an overall sense of the categories and topics they are interested in.
