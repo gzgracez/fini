@@ -86,7 +86,6 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
     <script>
       var follow = false;
       if (document.getElementById("company").innerHTML == "Follow") {
@@ -96,7 +95,7 @@
           e.preventDefault();
           $.ajax({
             type: "POST",
-            url: "/followUpdate?id={{ idCompany }}&gr=Company&follow=" + follow,
+            url: "/followUpdate?id={{ idCompany }}&category=Company&follow=" + follow,
             timeout: 2000,
             contentType: "application/json; charset=utf-8",
             beforeSend: function() {

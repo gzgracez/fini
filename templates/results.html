@@ -11,11 +11,11 @@
         <fieldset>
             {% if not followed %}
                 <div class="form-group">
-                    <button class="btn btn-default" type="submit" id="industry" name="industry" value={{ idGroup }}>Follow</button>
+                    <button class="btn btn-default" type="submit" id="{{ category }}" name="industry" value={{ idGroup }}>Follow</button>
                 </div>
             {% else %}
                 <div class="form-group">
-                    <button class="btn btn-default" type="submit" id="industry" name="industry" value={{ idGroup }}>Unfollow</button>
+                    <button class="btn btn-default" type="submit" id="{{ category }}" name="industry" value={{ idGroup }}>Unfollow</button>
                 </div>
             {% endif %}
         </fieldset>
@@ -43,14 +43,14 @@
     <script>
       var follow = false;
       // var gr = {{ title }}.split(":",1);
-      if (document.getElementById("industry").innerHTML == "Follow") {
+      if (document.getElementById("{{ category }}").innerHTML == "Follow") {
         follow = true;
       }
-      document.getElementById("industry").addEventListener("click", function(e) {
+      document.getElementById("{{ category }}").addEventListener("click", function(e) {
           e.preventDefault();
           $.ajax({
             type: "POST",
-            url: "/followUpdate?id={{ idGroup }}&gr=Industry&follow=" + follow,
+            url: "/followUpdate?id={{ idGroup }}&category={{ category }}&follow=" + follow,
             timeout: 2000,
             contentType: "application/json; charset=utf-8",
             beforeSend: function() {
@@ -61,11 +61,11 @@
             },
             success: function(data) {
               if (follow) {
-                document.getElementById("industry").innerHTML = "Unfollow";
+                document.getElementById("{{ category }}").innerHTML = "Unfollow";
                 follow = false;
               }
               else {
-                document.getElementById("industry").innerHTML = "Follow";
+                document.getElementById("{{ category }}").innerHTML = "Follow";
                 follow = true;
               }
               // console.log ("SUCCESS FOLLOW LOADING");
