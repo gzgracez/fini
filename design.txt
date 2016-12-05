@@ -2,12 +2,12 @@
 = fini Design =
 ===============
 
-Our vision of a simplistic, easy-to-use and available financial news and market info aggregator was largely inspired by CS50’s own problem sets 7 and 8. We thus chose to start of with a common framework of Flask, SQLite and Bootstrap. Preferring back-end handling of data and a need for altering API-usage directed us to chose a Python-based rather than JavaScript-based website. That said, we found great use of the latter language in interactive buttons for our follow/unfollow feature.
+Our vision of a simplistic, easy-to-use and available financial news and market information aggregator was largely inspired by CS50’s own problem sets 7 and 8. We thus chose to start of with a common framework of Flask, SQLite and Bootstrap. Preferring a secure back-end handling of data and a need for altering API-usage, we chose to implement most of our data-retrieval in the back-end. That said, we found great use of JavaScript in the interactive buttons for our follow/unfollow feature.
 
-Our database is built on a number of tables, all related by integer IDs, allowing for efficiency in queries and scalability.
+Our database is built on a number of tables, all related by integer IDs, minimizing data redundancy and allowing for high scalability.
 
-Google’s well established news search feature was a natural choice for finding our news. Standing on the shoulders of those before us, we apply custom filter by user preferences and scrape for images.
+Google’s well established news search feature was a natural choice for finding our news. Standing on the shoulders of those before us, we apply custom filter by user preferences and webscrape for images and news details.
 
-Similarly to news searching, Yahoo Finance was an obvious choice for retrieving stock metrics. A selection of key metrics is thus displayed by .csv-handling of files downloaded from Yahoo Finance.
+Similar to news searching, Yahoo Finance was an obvious choice for retrieving stock metrics. A selection of key metrics is thus displayed by handling of .csv files from Yahoo Finance.
 
-Worth mentioning is our hard-coding of the options for geography. Firstly, we found that news searching was more efficient if limiting the search to country geography. Second, rather than loading from a back-end file or database every country for each rendering of our search page, we found incorporating the options in the front-end HTML.
+We have also limited the user's options for geography with a hard-coded dropdown. First, we found that news searching was more efficient and relevant when limiting the search to country geography. Second, rather than loading the countries from a back-end file or database when rendering our search page, we have incorporated the countries in the front-end HTML, reducing the amount of data that needs to be passed and manipulated.

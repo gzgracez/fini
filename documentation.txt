@@ -4,30 +4,30 @@
 ============================
 ============================
 
-=========
-= Short =
-=========
+================
+= Running fini =
+================
 
-Our application runs on Python 3. In order to run our application, you have to install the packages listed in requirements.txt: pip3 install -r requirements.txt. The environment configuration is located in export, so you can source the file to setup the configuration. You can then flask run to run the application locally on port 5000!
+Our application runs on Python 3. In order to run our application, you need to install the packages listed in requirements.txt: pip3 install -r requirements.txt. The environment configuration is located in export, so you can source the file to setup the configuration. You can then flask run to run the application locally on port 5000!
 
 Our application is also hosted on Heroku at: fini-gs.herokuapp.com with our Heroku configuration in our Procfile!
 
-========
-= Long =
-========
+==============
+= Using fini =
+==============
 
-Fini is built on Flask, with an SQLite database, Bootstrap, JavaScript, jQuery, and Jinja. We have a user authentication system that allows users to change their usernames and passwords - the passwords are hashed and stored for security. 
+Fini is built on Flask, with an SQLite database, Bootstrap, JavaScript, jQuery, and Jinja. We have an user authentication system that allows users to change their usernames and passwords - the passwords are hashed for security. 
 
-Once logged in, we display the user’s home page, a page that displays aggregated news based on the user’s interests (the companies, industries and geographies that they follow). We get our news through Google’s news RSS feed and web-scrape to find the details of each article (as the details are in HTML within the RSS feed).
+Once logged in, we display the user’s home page, a page that displays aggregated news based on the user’s interests (the companies, industries and geographies that they follow). We get our news through Google News' RSS feed and web-scrape to find the details of each article (as the details are in HTML within the RSS feed).
 
 The user can also search for relevant financial information by 3 categories: Ticker, Industry, and Geography. 
 
-When the user searches by Ticker, we display a page with relevant metrics and news. We similarly comb through Google’s news feed to get the news, displaying the top 5 news articles on the page. We webscrape Google search results to find the logo, caching it so that access will be faster next time the company is searched. Our stock metrics are gotten through Yahoo Finance’s csv file (see https://web.archive.org/web/20040816081607/http://www.gummy-stuff.org/Yahoo-data.htm for further details). On this page, we also allow the user to follow/unfollow the company with our follow/unfollow button. We used ajax so that the follow button sends a POST request to /followUpdate without refreshing the page, making Follow/Unfollow much faster than if we were to re-search this page to follow.
+When the user searches by Ticker, we display a page with relevant metrics and news. We similarly comb through Google News' feed to get the news, displaying the top 5 news articles on the page. We webscrape Google search results to find the logo, caching it so that access will be faster the next time the company is searched. Our stock metrics are gotten through Yahoo Finance’s csv file (see https://web.archive.org/web/20040816081607/http://www.gummy-stuff.org/Yahoo-data.htm for further details). On this page, we also allow the user to follow/unfollow the company with our follow/unfollow button. We used ajax so that the follow button sends a POST request to /followUpdate without refreshing the page, making Follow/Unfollow much faster than if we were to re-search this page to follow.
 
-We provide similar functionality for search by Industry and Geography - for both, we display relevant news through Google’s news feed. We have similarly implemented follow with ajax so that the page is not refreshed. We provide a dropdown search for Geography so that users can search for true geographical locations. 
+We provide similar functionality for search by Industry and Geography - for both, we display relevant news through Google News' feed. We have similarly implemented follow with ajax so that the page is not refreshed. We provide a dropdown search for Geography so that users can search for true geographical locations. 
 
 We also provide a Preferences page under Settings where users can see the Companies, Industries, and Geographies they are currently following, so they can more easily get an overall sense of the categories and topics they are interested in.
 
-Through account setting can users alter their username and password.
+Through Account under Settings, users can alter their username and password.
 
-At last, a generic “about” and “contact us” page allows for users to learn more about the project and reach out for feedback or questions.
+At last, a generic About and Contact Us page allows for users to learn more about the project and reach out with feedback or questions.
