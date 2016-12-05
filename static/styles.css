@@ -1,10 +1,26 @@
+.img-profile
+{
+    width:100px;
+    height:100px;
+    margin-top: 40px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+}
+
+.btn-secondary
+{
+    background-color: #cccccc;
+}
+
 .container
 {
     /* center contents */
+    margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
 }
+
 
 main .form-control
 {

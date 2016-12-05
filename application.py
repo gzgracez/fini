@@ -62,8 +62,6 @@ def index():
             geo += i["name"] + "OR"
         geo = geo[:-2]
 
-    print(q)
-
     news = lookupArticles(geo=geo, q=q)
     return render_template("index.html", news=news)
 
@@ -337,3 +335,13 @@ def preferences():
     userIndustry = db.execute("SELECT idIndustry, name FROM userIndustry INNER JOIN industries ON idIndustry = id WHERE idUser = :idUser ORDER BY name ASC", idUser = session["user_id"])
     userGeography = db.execute("SELECT idGeography, name FROM userGeography INNER JOIN geographies ON idGeography = id WHERE idUser = :idUser ORDER BY name ASC", idUser = session["user_id"])
     return render_template("preferences.html", userCompany = userCompany, userIndustry = userIndustry, userGeography = userGeography)
+
+@app.route("/about")
+def about():
+    """Render about."""
+    return render_template("about.html")
+
+@app.route("/contact")
+def contact():
+    """Render contact."""
+    return render_template("contact.html")

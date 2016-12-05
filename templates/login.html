@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block main %}
+    <center><img src="static/fini_black.png" style="width:150px;height:150px;"></center>
     <form action="{{ url_for('login') }}" method="post">
         <fieldset>
             <div class="form-group">
@@ -16,6 +17,10 @@
             <div class="form-group">
                 <button class="btn btn-default" type="submit">Log In</button>
             </div>
-        </fieldset>
+        </fieldset>    
+    </form>
+    Not a user?
+    <form action="{{ url_for('register') }}">
+        <button class="btn btn-secondary">Register</button>
     </form>
 {% endblock %}
