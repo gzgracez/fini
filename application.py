@@ -32,13 +32,14 @@ db = SQL("sqlite:///fini.db")
 @app.route("/")
 @login_required
 def index():
+    """Display index news."""
 
-    # load user's preferences
+    # load user's company, industry and geography preferences
     c_prefs = db.execute("SELECT ticker FROM userCompany INNER JOIN companies ON idCompany = id WHERE idUser = :idUser", idUser = session["user_id"])
     i_prefs = db.execute("SELECT name FROM userIndustry INNER JOIN industries ON idIndustry = id WHERE idUser = :idUser", idUser = session["user_id"])
     g_prefs = db.execute("SELECT name FROM userGeography INNER JOIN geographies ON idGeography = id WHERE idUser = :idUser", idUser = session["user_id"])
 
-    # if user has no preferences, render default selection
+    # if user has no preferences, render default selection of news
     if len(c_prefs) == 0 and len(i_prefs) == 0 and len(g_prefs) == 0:
         news = lookupArticles(topic="b")
         return render_template("index.html", news=news)
@@ -188,7 +189,6 @@ def search():
                 return render_template("search.html")
             
             # check whether user follows company
-            # get company id
             idCompany = db.execute("SELECT id FROM companies WHERE name = :name", name = stock["name"])
 
             # if company is not in database, add it and get id
@@ -212,7 +212,6 @@ def search():
             name = request.form.get("prompt").capitalize()
 
             # check whether user follows industry
-            # get company id
             idIndustry = db.execute("SELECT id FROM industries WHERE name = :name", name = name)
 
             # if company is not in database, add it and get id
@@ -316,6 +315,7 @@ def account():
 @login_required
 def followUpdate():
     """Add/remove to/from interests."""
+
     category = request.args.get('category')
     if request.args.get('id') and request.args.get('follow') and request.args.get('category'):
         if request.args.get('follow') == "true":
@@ -331,6 +331,7 @@ def followUpdate():
 @login_required
 def preferences():
     """View/remove preferences."""
+
     userCompany = db.execute("SELECT idCompany, name FROM userCompany INNER JOIN companies ON idCompany = id WHERE idUser = :idUser ORDER BY name ASC", idUser = session["user_id"])
     userIndustry = db.execute("SELECT idIndustry, name FROM userIndustry INNER JOIN industries ON idIndustry = id WHERE idUser = :idUser ORDER BY name ASC", idUser = session["user_id"])
     userGeography = db.execute("SELECT idGeography, name FROM userGeography INNER JOIN geographies ON idGeography = id WHERE idUser = :idUser ORDER BY name ASC", idUser = session["user_id"])
@@ -340,6 +341,7 @@ def preferences():
 @login_required
 def unfollow():
     """View/remove preferences."""
+
     if not request.form.get("Company") and not request.form.get("Industry") and not request.form.get("Geography"):
         flash("All fields required")
         return redirect(url_for("preferences"))
@@ -349,15 +351,17 @@ def unfollow():
         current.append(request.form.get(i))
     deleteStr = "DELETE FROM {} WHERE idUser={} AND {}={}".format("user" + current[0], session["user_id"], "id" + current[0], current[1])
     db.execute(deleteStr)
-    # db.execute("DELETE FROM :userCat WHERE idUser=:idUser AND :idCat = :id", userCat = "user" + current[0], idCat = "id" + current[0], idUser = session["user_id"], id = current[1])
+
     return redirect(url_for("preferences"))
 
 @app.route("/about")
 def about():
     """Render about."""
+
     return render_template("about.html")
 
 @app.route("/contact")
 def contact():
     """Render contact."""
+    
     return render_template("contact.html")
