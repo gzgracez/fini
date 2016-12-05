@@ -328,13 +328,29 @@ def followUpdate():
     return "update"
     
 @app.route("/preferences")
+@login_required
 def preferences():
     """View/remove preferences."""
-
     userCompany = db.execute("SELECT idCompany, name FROM userCompany INNER JOIN companies ON idCompany = id WHERE idUser = :idUser ORDER BY name ASC", idUser = session["user_id"])
     userIndustry = db.execute("SELECT idIndustry, name FROM userIndustry INNER JOIN industries ON idIndustry = id WHERE idUser = :idUser ORDER BY name ASC", idUser = session["user_id"])
     userGeography = db.execute("SELECT idGeography, name FROM userGeography INNER JOIN geographies ON idGeography = id WHERE idUser = :idUser ORDER BY name ASC", idUser = session["user_id"])
     return render_template("preferences.html", userCompany = userCompany, userIndustry = userIndustry, userGeography = userGeography)
+
+@app.route("/unfollow", methods=["POST"])
+@login_required
+def unfollow():
+    """View/remove preferences."""
+    if not request.form.get("Company") and not request.form.get("Industry") and not request.form.get("Geography"):
+        flash("All fields required")
+        return redirect(url_for("preferences"))
+    current = []
+    for i in request.form:
+        current.append(i)
+        current.append(request.form.get(i))
+    deleteStr = "DELETE FROM {} WHERE idUser={} AND {}={}".format("user" + current[0], session["user_id"], "id" + current[0], current[1])
+    db.execute(deleteStr)
+    # db.execute("DELETE FROM :userCat WHERE idUser=:idUser AND :idCat = :id", userCat = "user" + current[0], idCat = "id" + current[0], idUser = session["user_id"], id = current[1])
+    return redirect(url_for("preferences"))
 
 @app.route("/about")
 def about():

@@ -17,8 +17,8 @@
                     <tr>
                         <td>{{ company["name"] }}</td>
                         <td>
-                            <form action="#" method="post" >
-                                            <button class="btn btn-default" id="Company" type="submit" name="idCompany" value={{ company["idCompany"] }}>X</button>
+                            <form action="{{ url_for('unfollow') }}" method="post" >
+                                            <button class="btn btn-default" id="Company" type="submit" name="Company" value={{ company["idCompany"] }}>X</button>
                             </form>
                         </td>
                     </tr>
@@ -38,8 +38,8 @@
                     <tr>
                         <td>{{ industry["name"] }}</td>
                         <td>
-                            <form action="#" method="post">
-                                            <button class="btn btn-default" id="Industry" type="submit" name="idIndustry" value={{ industry["idIndustry"] }}>X</button>
+                            <form action="{{ url_for('unfollow') }}" method="post">
+                                            <button class="btn btn-default" id="Industry" type="submit" name="Industry" value={{ industry["idIndustry"] }}>X</button>
                             </form>
                         </td>
                     </tr>
@@ -59,8 +59,8 @@
                     <tr>
                         <td>{{ geography["name"] }}</td>
                         <td>
-                            <form action="#" method="post">
-                                            <button class="btn btn-default" id="Geography" type="submit" name="idGeography" value={{ geography["idGeography"] }}>X</button>
+                            <form action="{{ url_for('unfollow') }}" method="post">
+                                            <button class="btn btn-default" id="Geography" type="submit" name="Geography" value={{ geography["idGeography"] }}>X</button>
                             </form>
                         </td>
                     </tr>
