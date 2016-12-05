@@ -18,7 +18,7 @@
                         <td>{{ company["name"] }}</td>
                         <td>
                             <form action="{{ url_for('unfollow') }}" method="post" >
-                                            <button class="btn btn-default" id="Company" type="submit" name="Company" value={{ company["idCompany"] }}>X</button>
+                                            <button class="btn btn-default btn-xs pull-right" id="Company" type="submit" name="Company" value={{ company["idCompany"] }}>Unfollow</button>
                             </form>
                         </td>
                     </tr>
@@ -39,7 +39,7 @@
                         <td>{{ industry["name"] }}</td>
                         <td>
                             <form action="{{ url_for('unfollow') }}" method="post">
-                                            <button class="btn btn-default" id="Industry" type="submit" name="Industry" value={{ industry["idIndustry"] }}>X</button>
+                                            <button class="btn btn-default btn-xs pull-right" id="Industry" type="submit" name="Industry" value={{ industry["idIndustry"] }}>Unfollow</button>
                             </form>
                         </td>
                     </tr>
@@ -60,7 +60,7 @@
                         <td>{{ geography["name"] }}</td>
                         <td>
                             <form action="{{ url_for('unfollow') }}" method="post">
-                                            <button class="btn btn-default" id="Geography" type="submit" name="Geography" value={{ geography["idGeography"] }}>X</button>
+                                            <button class="btn btn-default btn-xs pull-right" id="Geography" type="submit" name="Geography" value={{ geography["idGeography"] }}>Unfollow</button>
                             </form>
                         </td>
                     </tr>
