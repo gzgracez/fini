@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Results
+    Company: {{ stock["name"] }}
 {% endblock %}
 
 {% block main %}
-    <h4>{{ stock["name"] }}, {{ stock["symbol"] }}</h4>
+    <h5>{{ stock["name"] }}, {{ stock["symbol"] }}</h5><br>
 
     <form method="post">
         <fieldset>

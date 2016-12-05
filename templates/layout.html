@@ -11,6 +11,8 @@
 
     <meta charset="utf-8"/>
     <meta content="initial-scale=1, width=device-width" name="viewport"/>
+
+    <!-- Allowing for storing website with logo on smartphone homescreen -->
     <link rel="apple-touch-icon" sizes="57x57" href="{{ url_for('static', filename='icons/apple-icon-57x57.png') }}">
     <link rel="apple-touch-icon" sizes="60x60" href="{{ url_for('static', filename='icons/apple-icon-60x60.png') }}">
     <link rel="apple-touch-icon" sizes="72x72" href="{{ url_for('static', filename='icons/apple-icon-72x72.png') }}">
@@ -31,7 +33,6 @@
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
 
     <title>fini {% block title %}{% endblock %}</title>
 
@@ -88,6 +89,7 @@
         </div>
         <nav class="navbar-default navbar-fixed-bottom">
             <div class="container-fluid">
+                <a class="navbar-brand navbar-right" href="{{ url_for('about') }}"><img src="static/gs_black.png" style="width:20px;height:20px;"></a>
                 <button aria-expanded="false" class="pull-left navbar-toggle collapsed" data-target="#bottom" data-toggle="collapse" type="button">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>

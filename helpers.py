@@ -12,20 +12,6 @@ from flask import redirect, render_template, request, session, url_for
 from functools import wraps
 from bs4 import BeautifulSoup
 
-def apology(top="", bottom=""):
-    """Renders message as an apology to user."""
-    def escape(s):
-        """
-        Escape special characters.
-
-        https://github.com/jacebrowning/memegen#special-characters
-        """
-        for old, new in [("-", "--"), (" ", "-"), ("_", "__"), ("?", "~q"),
-            ("%", "~p"), ("#", "~h"), ("/", "~s"), ("\"", "''")]:
-            s = s.replace(old, new)
-        return s
-    return render_template("apology.html", top=escape(top), bottom=escape(bottom))
-
 def login_required(f):
     """
     Decorate routes to require login.
@@ -40,7 +26,7 @@ def login_required(f):
     return decorated_function
 
 def lookup(symbol):
-    """Look up stock."""
+    """Look up stock by Yahoo Finance."""
 
     # reject symbol if it starts with caret
     if symbol.startswith("^"):
@@ -84,9 +70,7 @@ def lookup(symbol):
     except:
         volume = "-"
 
-
     # get stock icon
-    # icon = getIconUrl(row[1])
     icon = getIconUrl(symbol)
 
     # return stock's name (as a str), price (as a float), and (uppercased) symbol (as a str)
@@ -128,7 +112,7 @@ def getIconUrl(symbol):
     return logoCache[symbol]
 
 def lookupArticles(geo="", q="", topic=""):
-    """Looks up articles for geo."""
+    """Looks up articles for geo, q and topic."""
 
     # feed = feedparser.parse("http://news.google.com/news?geo={}&q={}&output=rss".format(urllib.parse.quote(geo, safe=""), urllib.parse.quote(q, safe="")))
     feed = feedparser.parse("http://news.google.com/news?geo={}&q={}&topic={}&output=rss".format(geo, q, topic))
