@@ -303,8 +303,8 @@ def account():
             # update password
             db.execute("UPDATE users SET hash = :hash WHERE id = :id", hash = pwd_context.encrypt(new), id = session["user_id"])
             flash("Password Changed!")
-        # return to password window
         
+        # return to password window
         return render_template("account.html")
     
     # else if user reached route via GET (as by clicking a link or via redirect)
