@@ -209,7 +209,7 @@ def search():
 
         if request.form.get("button") == "industry":
 
-            name = request.form.get("prompt").capitalize()
+            name = request.form.get("prompt").title()
 
             # check whether user follows industry
             idIndustry = db.execute("SELECT id FROM industries WHERE name = :name", name = name)
