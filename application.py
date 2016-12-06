@@ -76,9 +76,9 @@ def login():
     # if user reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
-        # ensure username was submitted
-        if not request.form.get("username"):
-            flash("Must provide username")
+        # ensure e-mail was submitted
+        if not request.form.get("email"):
+            flash("Must provide e-mail")
             return render_template("login.html")
 
         # ensure password was submitted
@@ -86,12 +86,12 @@ def login():
             flash("Must provide password")
             return render_template("login.html")
 
-        # query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = :username", username=request.form.get("username"))
+        # query database for e-mail
+        rows = db.execute("SELECT * FROM users WHERE email = :email", email=request.form.get("email"))
         
-        # ensure username exists and password is correct
+        # ensure e-mail exists and password is correct
         if len(rows) != 1 or not pwd_context.verify(request.form.get("password"), rows[0]["hash"]):
-            flash("Invalid username and/or password")
+            flash("Invalid e-mail and/or password")
             return render_template("login.html")
 
         # remember which user has logged in
@@ -124,9 +124,9 @@ def register():
     # if user reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
-        # ensure username was submitted
-        if not request.form.get("username"):
-            flash("Must provide username")
+        # ensure e-mail was submitted and that likely is valid
+        if not request.form.get("email") or not verifyEmail(request.form.get("email")):
+            flash("Must provide valid e-mail")
             return render_template("register.html")
 
         # ensure password was submitted
@@ -144,15 +144,15 @@ def register():
             flash("Confirmed password does not match!")
             return render_template("register.html")
 
-        # check username doesn't already exist
-        repeated = db.execute("SELECT * FROM users WHERE username = :username", username=request.form.get("username"))
+        # check email doesn't already exist
+        repeated = db.execute("SELECT * FROM users WHERE email = :email", email=request.form.get("email"))
         if len(repeated) > 0:
-            flash("Username is already taken!")
+            flash("E-mail is already taken!")
             return render_template("register.html")
             
-        # query database for username
-        rows = db.execute("INSERT INTO users (username, hash) VALUES (:username, :pwhash)", 
-                                username=request.form.get("username"), 
+        # query database for email
+        rows = db.execute("INSERT INTO users (email, hash) VALUES (:email, :pwhash)", 
+                                email=request.form.get("email"), 
                                 pwhash=pwd_context.encrypt(request.form.get("password")))
         
         # remember which user has logged in
@@ -267,16 +267,16 @@ def account():
     # if user reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
-        if request.form.get("btn") == "username":
+        if request.form.get("btn") == "email":
 
-            # ensure all fields were filled
-            if not request.form.get("username"):
-                flash("Username required")
+            # ensure e-mail was submitted and is likely valid
+            if not request.form.get("email") or not verifyEmail(request.form.get("email")):
+                flash("E-mail required")
                 return render_template("account.html")
             
-            # update username
-            db.execute("UPDATE users SET username = :username WHERE id = :id", username = request.form.get("username"), id = session["user_id"])
-            flash("Username Changed!")
+            # update email
+            db.execute("UPDATE users SET email = :email WHERE id = :id", email = request.form.get("email"), id = session["user_id"])
+            flash("E-mail Changed!")
 
         if request.form.get("btn") == "password":
 
@@ -365,3 +365,43 @@ def contact():
     """Render contact."""
     
     return render_template("contact.html")
+
+def verifyEmail(email):
+    """Verify e-mail adress as by 'verybadatthis' (http://stackoverflow.com/questions/22233848/how-to-verify-an-email-address-in-python-using-smtplib)"""
+
+    # check that e-mail matches expected formatting
+    match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email)
+    if match == None:
+        return False
+
+    # identify domain name from email address
+    domain_name = email.split('@')[1]
+
+    # get the MX record for the domain
+    records = dns.resolver.query(domain_name, 'MX')
+    mxRecord = records[0].exchange
+    mxRecord = str(mxRecord)
+
+    # Get local server hostname
+    host = socket.gethostname()
+
+    # SMTP lib setup (use debug level for full output)
+    server = smtplib.SMTP()
+    server.set_debuglevel(0)
+
+    # SMTP Conversation
+    server.connect(mxRecord)
+    server.helo(host)
+    server.mail('me@domain.com')
+    code, message = server.rcpt(str(email))
+    server.quit()
+
+    # Assume 250 as Success
+    if code == 250:
+        return True
+    else:
+        return False
+
+
+
+
