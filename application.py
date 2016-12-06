@@ -367,40 +367,14 @@ def contact():
     return render_template("contact.html")
 
 def verifyEmail(email):
-    """Verify e-mail adress as by 'verybadatthis' (http://stackoverflow.com/questions/22233848/how-to-verify-an-email-address-in-python-using-smtplib)"""
+    """Verify e-mail formatting"""
 
     # check that e-mail matches expected formatting
     match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email)
     if match == None:
         return False
-
-    # identify domain name from email address
-    domain_name = email.split('@')[1]
-
-    # get the MX record for the domain
-    records = dns.resolver.query(domain_name, 'MX')
-    mxRecord = records[0].exchange
-    mxRecord = str(mxRecord)
-
-    # Get local server hostname
-    host = socket.gethostname()
-
-    # SMTP lib setup (use debug level for full output)
-    server = smtplib.SMTP()
-    server.set_debuglevel(0)
-
-    # SMTP Conversation
-    server.connect(mxRecord)
-    server.helo(host)
-    server.mail('me@domain.com')
-    code, message = server.rcpt(str(email))
-    server.quit()
-
-    # Assume 250 as Success
-    if code == 250:
-        return True
     else:
-        return False
+        return True
 
 
 
