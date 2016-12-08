@@ -82,7 +82,7 @@ def login():
             return render_template("login.html")
 
         # ensure password was submitted
-        elif not request.form.get("password"):
+        if not request.form.get("password"):
             flash("Must provide password")
             return render_template("login.html")
 
@@ -130,17 +130,17 @@ def register():
             return render_template("register.html")
 
         # ensure password was submitted
-        elif not request.form.get("password"):
+        if not request.form.get("password"):
             flash("Must provide password")
             return render_template("register.html")
             
         # ensure password was confirmed
-        elif not request.form.get("confirmation"):
+        if not request.form.get("confirmation"):
             flash("Must confirm password")
             return render_template("register.html")
             
         # ensure confirmed password is the same
-        elif request.form.get("confirmation") != request.form.get("password"):
+        if request.form.get("confirmation") != request.form.get("password"):
             flash("Confirmed password does not match!")
             return render_template("register.html")
 
@@ -188,7 +188,7 @@ def search():
                 flash("Symbol not found")
                 return render_template("search.html")
             
-            # check whether user follows company
+            # check whether company is in db
             idCompany = db.execute("SELECT id FROM companies WHERE name = :name", name = stock["name"])
 
             # if company is not in database, add it and get id
@@ -211,16 +211,16 @@ def search():
 
             name = request.form.get("prompt").title()
 
-            # check whether user follows industry
+            # check whether industry is in db
             idIndustry = db.execute("SELECT id FROM industries WHERE name = :name", name = name)
 
-            # if company is not in database, add it and get id
+            # if industry is not in database, add it and get id
             if len(idIndustry) == 0:
                 idIndustry = db.execute("INSERT INTO industries (name) VALUES (:name)", name = name)
             else:
                 idIndustry = idIndustry[0]["id"]
 
-            # check if company is in user's interest
+            # check if industry is in user's interest
             rows = db.execute("SELECT * FROM userIndustry WHERE idUser = :idUser AND idIndustry = :idIndustry", idUser = session["user_id"], idIndustry = idIndustry)
 
             if len(rows) == 0:
@@ -232,10 +232,9 @@ def search():
 
         if request.form.get("button") == "geography":
 
-            name = request.form.get("prompt").capitalize()
+            name = request.form.get("prompt").title()
 
-            # check whether user follows geography
-            # get company id
+            # check whether geography is in db
             idGeography = db.execute("SELECT id FROM geographies WHERE name = :name", name = name)
 
             # if company is not in database, add it and get id
@@ -296,7 +295,7 @@ def account():
                     return render_template("account.html")
                 
             # check that new passwords match
-            elif new != newr:
+            if new != newr:
                 flash("Passwords do not match")
                 return render_template("account.html")
             
@@ -320,11 +319,13 @@ def followUpdate():
     if request.args.get('id') and request.args.get('follow') and request.args.get('category'):
         if request.args.get('follow') == "true":
             db.execute("INSERT INTO :userCat (idUser, :idCat) VALUES (:idUser, :id)", userCat = "user" + category, idCat = "id" + category, idUser = session["user_id"], id = request.args.get('id'))
-            # print("INSERTED")
         else:
-            deleteStr = "DELETE FROM {} WHERE idUser={} AND {}={}".format("user" + category, session["user_id"], "id" + category, request.args.get('id'))
-            db.execute(deleteStr)
-            # print("DELETED")
+            if category == "Company":
+                db.execute("DELETE FROM userCompany WHERE idUser = :idUser AND idCompany = :idCompany", idUser = session["user_id"], idCompany = request.args.get('id'))
+            if category == "Industry":
+                db.execute("DELETE FROM userIndustry WHERE idUser = :idUser AND idIndustry = :idIndustry", idUser = session["user_id"], idIndustry = request.args.get('id'))
+            if category == "Geography":
+                db.execute("DELETE FROM userGeography WHERE idUser = :idUser AND idGeography = :idGeography", idUser = session["user_id"], idGeography = request.args.get('id'))
     return "update"
     
 @app.route("/preferences")
@@ -340,17 +341,25 @@ def preferences():
 @app.route("/unfollow", methods=["POST"])
 @login_required
 def unfollow():
-    """View/remove preferences."""
+    """Remove preferences."""
 
+    # validate some button was pressed
     if not request.form.get("Company") and not request.form.get("Industry") and not request.form.get("Geography"):
-        flash("All fields required")
         return redirect(url_for("preferences"))
+    
+    # organize form components
     current = []
     for i in request.form:
         current.append(i)
         current.append(request.form.get(i))
-    deleteStr = "DELETE FROM {} WHERE idUser={} AND {}={}".format("user" + current[0], session["user_id"], "id" + current[0], current[1])
-    db.execute(deleteStr)
+
+    # delete company/industry/geography
+    if current[0] == "Company":
+        db.execute("DELETE FROM userCompany WHERE idUser = :idUser AND idCompany = :idCompany", idUser = session["user_id"], idCompany = current[1])
+    if current[0] == "Industry":
+        db.execute("DELETE FROM userIndustry WHERE idUser = :idUser AND idIndustry = :idIndustry", idUser = session["user_id"], idIndustry = current[1])
+    if current[0] == "Geography":
+        db.execute("DELETE FROM userGeography WHERE idUser = :idUser AND idGeography = :idGeography", idUser = session["user_id"], idGeography = current[1])
 
     return redirect(url_for("preferences"))
 
@@ -375,7 +384,3 @@ def verifyEmail(email):
         return False
     else:
         return True
-
-
-
-
