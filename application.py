@@ -82,7 +82,7 @@ def login():
             return render_template("login.html")
 
         # ensure password was submitted
-        if not request.form.get("password"):
+        elif not request.form.get("password"):
             flash("Must provide password")
             return render_template("login.html")
 
@@ -130,17 +130,17 @@ def register():
             return render_template("register.html")
 
         # ensure password was submitted
-        if not request.form.get("password"):
+        elif not request.form.get("password"):
             flash("Must provide password")
             return render_template("register.html")
             
         # ensure password was confirmed
-        if not request.form.get("confirmation"):
+        elif not request.form.get("confirmation"):
             flash("Must confirm password")
             return render_template("register.html")
             
         # ensure confirmed password is the same
-        if request.form.get("confirmation") != request.form.get("password"):
+        elif request.form.get("confirmation") != request.form.get("password"):
             flash("Confirmed password does not match!")
             return render_template("register.html")
 
@@ -295,7 +295,7 @@ def account():
                     return render_template("account.html")
                 
             # check that new passwords match
-            if new != newr:
+            elif new != newr:
                 flash("Passwords do not match")
                 return render_template("account.html")
             
