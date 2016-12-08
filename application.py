@@ -322,9 +322,9 @@ def followUpdate():
         else:
             if category == "Company":
                 db.execute("DELETE FROM userCompany WHERE idUser = :idUser AND idCompany = :idCompany", idUser = session["user_id"], idCompany = request.args.get('id'))
-            if category == "Industry":
+            elif category == "Industry":
                 db.execute("DELETE FROM userIndustry WHERE idUser = :idUser AND idIndustry = :idIndustry", idUser = session["user_id"], idIndustry = request.args.get('id'))
-            if category == "Geography":
+            elif category == "Geography":
                 db.execute("DELETE FROM userGeography WHERE idUser = :idUser AND idGeography = :idGeography", idUser = session["user_id"], idGeography = request.args.get('id'))
     return "update"
     
@@ -356,9 +356,9 @@ def unfollow():
     # delete company/industry/geography
     if current[0] == "Company":
         db.execute("DELETE FROM userCompany WHERE idUser = :idUser AND idCompany = :idCompany", idUser = session["user_id"], idCompany = current[1])
-    if current[0] == "Industry":
+    elif current[0] == "Industry":
         db.execute("DELETE FROM userIndustry WHERE idUser = :idUser AND idIndustry = :idIndustry", idUser = session["user_id"], idIndustry = current[1])
-    if current[0] == "Geography":
+    elif current[0] == "Geography":
         db.execute("DELETE FROM userGeography WHERE idUser = :idUser AND idGeography = :idGeography", idUser = session["user_id"], idGeography = current[1])
 
     return redirect(url_for("preferences"))
