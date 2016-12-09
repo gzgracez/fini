@@ -8,6 +8,7 @@ import cssselect
 from urllib.parse import urlencode, urlparse, parse_qs
 from lxml.html import fromstring
 from requests import get
+import requests
 from flask import redirect, render_template, request, session, url_for
 from functools import wraps
 from bs4 import BeautifulSoup
@@ -100,9 +101,11 @@ def getIconUrl(symbol):
     if symbol in logoCache:
         return logoCache[symbol]
     url = "http://www.google.com/search?q=ticker+" + symbol
-    request = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    website = urllib.request.urlopen(request)
-    soup = BeautifulSoup(website.read(), 'html.parser')
+    website = requests.get(url)
+    if website.status_code != 200: 
+        logoCache[symbol] = None
+        return None
+    soup = BeautifulSoup(website.content)
     try:
         img = soup.findAll('img', {'style': 'margin-left:0px;margin-right:0px'})[0]['src']
         logoCache[symbol] = img
